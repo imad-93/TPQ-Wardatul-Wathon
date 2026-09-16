@@ -1,0 +1,93 @@
+rules_version = '2';
+
+// CATATAN: rules ini adalah TITIK AWAL, bukan aturan produksi final.
+// Uji dengan Firebase Emulator Suite dan sesuaikan sebelum go-live.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function myProfile() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+
+    function myRole() {
+      return isSignedIn() ? myProfile().role : null;
+    }
+
+    function isAdmin() {
+      return myRole() == 'admin';
+    }
+
+    function isUstadzah() {
+      return myRole() == 'ustadzah';
+    }
+
+    function isWaliOf(santriId) {
+      return myRole() == 'wali' && myProfile().refId == santriId;
+    }
+
+    // users/{uid} — profil akun, hanya boleh dibaca oleh pemiliknya atau admin.
+    match /users/{uid} {
+      allow read: if isSignedIn() && (request.auth.uid == uid || isAdmin());
+      allow write: if isAdmin(); // pembuatan akun idealnya lewat Cloud Function (Admin SDK)
+    }
+
+    // jilid, ustadzah — dapat dibaca semua pengguna yang login, ditulis admin saja.
+    match /jilid/{jilidId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+
+    match /ustadzah/{ustadzahId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+
+    // santri & sub-koleksinya
+    match /santri/{santriId} {
+      allow read: if isAdmin() || isUstadzah() || isWaliOf(santriId);
+      allow write: if isAdmin();
+
+      match /riwayat_bacaan/{docId} {
+        allow read: if isAdmin() || isUstadzah() || isWaliOf(santriId);
+        allow create: if isAdmin() || isUstadzah();
+        allow update, delete: if isAdmin();
+      }
+
+      match /riwayat_hafalan/{docId} {
+        allow read: if isAdmin() || isUstadzah() || isWaliOf(santriId);
+        allow create: if isAdmin() || isUstadzah();
+        allow update, delete: if isAdmin();
+      }
+
+      match /keuangan/{docId} {
+        allow read: if isAdmin() || isUstadzah() || isWaliOf(santriId);
+        // Wali hanya boleh memicu pembayaran lewat Cloud Function/webhook
+        // payment gateway, BUKAN menulis status "lunas" langsung dari client.
+        allow create: if isAdmin();
+        allow update: if isAdmin() || isUstadzah();
+        allow delete: if isAdmin();
+      }
+    }
+
+    // pengumuman — dibaca semua yang login, ditulis admin.
+    match /pengumuman/{docId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+
+    // settings & sub-koleksi iuran
+    match /settings/{docId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+
+      match /iuran_items/{itemId} {
+        allow read: if isSignedIn();
+        allow write: if isAdmin();
+      }
+    }
+  }
+}

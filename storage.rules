@@ -1,0 +1,58 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Storage rules BISA membaca Firestore lewat firestore.get(), jadi kita
+    // pakai koleksi users/{uid} yang sama seperti firestore.rules untuk
+    // menentukan role — satu sumber kebenaran, tidak perlu custom claims.
+    // https://firebase.google.com/docs/storage/security/rules-conditions#firestore
+    function userRole() {
+      return firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.role;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && userRole() == 'admin';
+    }
+
+    function isUstadzah() {
+      return isSignedIn() && userRole() == 'ustadzah';
+    }
+
+    // Buku PDF (bacaan & hafalan) — dibaca semua pengguna login (wali perlu
+    // buka PDF di portalnya), hanya admin yang boleh mengunggah/mengganti.
+    match /books/{jilidId}/{jenis}/{fileName} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin()
+                   && request.resource.size < 25 * 1024 * 1024
+                   && request.resource.contentType == 'application/pdf';
+    }
+
+    // Logo & QRIS lembaga — dibaca publik (tampil di layar login SEBELUM
+    // orang login), hanya admin yang boleh mengunggah/mengganti.
+    match /branding/{fileName} {
+      allow read: if true;
+      allow write: if isAdmin()
+                   && request.resource.size < 5 * 1024 * 1024
+                   && request.resource.contentType.matches('image/.*');
+    }
+
+    // Pesan suara ustadzah — dibaca semua pengguna login (wali perlu
+    // memutarnya), hanya admin/ustadzah yang boleh mengunggah.
+    // Catatan: belum dibatasi ke ustadzah pengampu kelas santri yang
+    // bersangkutan secara spesifik (butuh 2 lookup Firestore berantai:
+    // santri -> jilidId -> ustadzah.jilidId). Cukup aman untuk skala TPQ
+    // satu lembaga; persempit lebih lanjut jika lembaga punya banyak
+    // cabang dengan ustadzah yang tidak saling dipercaya.
+    match /voice_notes/{santriId}/{fileName} {
+      allow read: if isSignedIn();
+      allow write: if (isAdmin() || isUstadzah())
+                   && request.resource.size < 10 * 1024 * 1024
+                   && request.resource.contentType.matches('audio/.*');
+    }
+  }
+}

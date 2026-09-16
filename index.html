@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>TPQ Wardatul Wathon</title>
+<meta name="description" content="Aplikasi pembelajaran TPQ Wardatul Wathon — Tukum Kidul, Lumajang">
+<meta name="theme-color" content="#12332D">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="TPQ Wardatul">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" defer></script>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<div id="offline-banner"></div>
+
+<!-- ======================= LOGIN ======================= -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-mark">
+      <div class="login-badge" id="login-badge-el">TW</div>
+      <h1>TPQ Wardatul Wathon</h1>
+      <p>Tukum Kidul, Lumajang — portal pembelajaran santri</p>
+    </div>
+    <div class="login-body" id="login-body">
+      <!-- diisi dinamis oleh js/main.js: mode aktivasi (username+password)
+           atau mode harian (password saja), tergantung localStorage -->
+    </div>
+  </div>
+</div>
+
+<!-- ======================= APP SHELL ======================= -->
+<div id="app-shell">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-mark" id="topbar-mark-el">TW</div>
+      <div class="topbar-title">TPQ Wardatul Wathon<small id="topbar-role-label">Portal</small></div>
+    </div>
+    <div class="topbar-right" style="display:flex;align-items:center;gap:14px;">
+      <div class="topbar-user" style="text-align:right;font-size:13px;line-height:1.3;">
+        <b id="topbar-username" style="display:block;font-size:13.5px;color:#fff;"></b>
+        <span id="topbar-usersub" style="color:#a9bdb6;font-size:11.5px;"></span>
+      </div>
+      <button class="icon-btn" title="Keluar" id="btn-logout"><i class="fa-solid fa-right-from-bracket"></i></button>
+    </div>
+  </div>
+  <div class="shell-body">
+    <div class="sidebar" id="sidebar"></div>
+    <div class="content" id="content"></div>
+  </div>
+</div>
+
+<!-- ======================= MODAL ======================= -->
+<div class="modal-backdrop" id="modal-backdrop">
+  <div class="modal-box" id="modal-box"></div>
+</div>
+
+<div class="toast" id="toast"><i class="fa-solid fa-circle-check"></i><span id="toast-text"></span></div>
+
+<!-- ======================= INSTALL BANNER (Android/Chrome) ======================= -->
+<div id="install-banner">
+  <i class="fa-solid fa-mobile-screen-button" style="font-size:20px;color:var(--gold);"></i>
+  <div style="flex:1;font-size:12.5px;">Pasang TPQ Wardatul Wathon di layar utama HP Anda untuk akses lebih cepat.</div>
+  <button class="btn-dismiss" id="btn-dismiss-install">Nanti</button>
+  <button class="btn-install" id="btn-install">Pasang</button>
+</div>
+
+<script type="module" src="js/main.js"></script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('service-worker.js').catch((err) => {
+        console.warn('Registrasi service worker gagal:', err);
+      });
+    });
+  }
+</script>
+</body>
+</html>
