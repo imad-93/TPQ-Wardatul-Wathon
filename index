@@ -1,0 +1,2042 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TPQ Wardatul Wathon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+  :root{
+    --paper:#FAF6EC;
+    --paper-deep:#F0E8D6;
+    --ink:#22221B;
+    --ink-soft:#615F50;
+    --ink-faint:#8B8873;
+    --pine:#1F4B43;
+    --pine-deep:#12332D;
+    --pine-soft:#E1EAE6;
+    --gold:#B4832A;
+    --gold-soft:#F3E6C6;
+    --brick:#A8452F;
+    --brick-soft:#F5DDD5;
+    --line:#DCD3B9;
+    --white:#FFFFFF;
+    --r-s:6px;
+    --r-m:12px;
+    --r-l:20px;
+    --shadow:0 1px 2px rgba(18,51,45,0.06), 0 6px 20px rgba(18,51,45,0.07);
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;}
+  html,body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{
+    font-family:'Fraunces',serif;
+    letter-spacing:-0.01em;
+    margin:0;
+  }
+  button{font-family:inherit;cursor:pointer;}
+  input,select,textarea{font-family:inherit;}
+  a{color:inherit;}
+  ::selection{background:var(--gold-soft);}
+
+  /* ---------- pattern helpers ---------- */
+  .lattice{
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(255,255,255,0.16) 1px, transparent 1px);
+    background-size:16px 16px;
+  }
+  .lattice-dark{
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(18,51,45,0.10) 1px, transparent 1px);
+    background-size:16px 16px;
+  }
+
+  /* ---------- login ---------- */
+  #login-screen{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+    background:
+      radial-gradient(ellipse at top left, #1a4038 0%, var(--pine-deep) 55%, #0d2622 100%);
+  }
+  .login-card{
+    width:100%;
+    max-width:400px;
+    background:var(--paper);
+    border-radius:var(--r-l);
+    box-shadow:0 30px 60px rgba(0,0,0,0.35);
+    overflow:hidden;
+  }
+  .login-mark{
+    padding:36px 32px 28px;
+    background:var(--pine-deep);
+    position:relative;
+    color:var(--gold-soft);
+  }
+  .login-mark::after{
+    content:"";
+    position:absolute; inset:0;
+    background-image:radial-gradient(circle at 1px 1px, rgba(243,230,198,0.14) 1px, transparent 1px);
+    background-size:14px 14px;
+    pointer-events:none;
+  }
+  .login-badge{
+    width:52px;height:52px;border-radius:50%;
+    border:1.5px solid var(--gold);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Fraunces',serif;font-size:22px;color:var(--gold-soft);
+    margin-bottom:16px;
+    position:relative;
+  }
+  .login-mark h1{font-size:22px;color:#fff;font-weight:600;position:relative;line-height:1.25;}
+  .login-mark p{margin:6px 0 0;font-size:13px;color:#c9d8d2;position:relative;}
+  .login-body{padding:28px 32px 32px;}
+  .field{margin-bottom:16px;}
+  .field label{
+    display:block;font-size:12.5px;color:var(--ink-soft);margin-bottom:6px;font-weight:600;
+  }
+  .field-static{
+    padding:11px 13px;border-radius:var(--r-s);background:var(--paper-deep);
+    color:var(--ink-faint);font-size:15px;border:1px solid var(--line);
+  }
+  .field input, .field select{
+    width:100%;padding:11px 13px;border-radius:var(--r-s);
+    border:1px solid var(--line);background:#fff;font-size:15px;color:var(--ink);
+    outline:none;
+  }
+  .field input:focus, .field select:focus{border-color:var(--pine);box-shadow:0 0 0 3px var(--pine-soft);}
+  .btn{
+    border:none;border-radius:var(--r-s);padding:11px 18px;font-size:14.5px;font-weight:600;
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    transition:transform .06s ease, filter .15s ease;
+  }
+  .btn:active{transform:scale(0.98);}
+  .btn-primary{background:var(--pine);color:#fff;width:100%;padding:12px;}
+  .btn-primary:hover{filter:brightness(1.08);}
+  .btn-gold{background:var(--gold);color:#3a2a08;}
+  .btn-gold:hover{filter:brightness(1.06);}
+  .btn-ghost{background:transparent;color:var(--pine);border:1px solid var(--line);}
+  .btn-ghost:hover{background:var(--pine-soft);}
+  .btn-danger{background:var(--brick-soft);color:var(--brick);}
+  .btn-danger:hover{background:#efc9be;}
+  .btn-sm{padding:7px 12px;font-size:13px;}
+  .login-demo-note{
+    margin-top:18px;padding:11px 13px;background:var(--gold-soft);border-radius:var(--r-s);
+    font-size:12px;color:#5c4413;line-height:1.5;
+  }
+  .login-error{color:var(--brick);font-size:13px;margin:-6px 0 14px;display:none;}
+
+  /* ---------- shell ---------- */
+  #app-shell{display:none;min-height:100vh;}
+  .topbar{
+    position:sticky;top:0;z-index:20;
+    background:var(--pine-deep);color:#fff;
+    padding:0 20px;height:60px;
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .topbar-left{display:flex;align-items:center;gap:12px;}
+  .topbar-mark{
+    width:34px;height:34px;border-radius:50%;border:1.5px solid var(--gold);
+    display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;
+    color:var(--gold-soft);font-size:14px;
+  }
+  .topbar-title{font-family:'Fraunces',serif;font-size:16.5px;font-weight:600;line-height:1.2;}
+  .topbar-title small{display:block;font-family:'Inter',sans-serif;font-weight:400;font-size:11px;color:#a9bdb6;}
+  .topbar-right{display:flex;align-items:center;gap:14px;}
+  .topbar-user{text-align:right;font-size:13px;line-height:1.3;}
+  .topbar-user b{display:block;font-size:13.5px;}
+  .topbar-user span{color:#a9bdb6;font-size:11.5px;}
+  .icon-btn{
+    width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.08);
+    border:none;color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;
+  }
+  .icon-btn:hover{background:rgba(255,255,255,0.16);}
+
+  .shell-body{display:flex;align-items:flex-start;min-height:calc(100vh - 60px);}
+  .sidebar{
+    width:220px;flex-shrink:0;background:var(--pine);min-height:calc(100vh - 60px);
+    padding:18px 12px;
+  }
+  .nav-item{
+    display:flex;align-items:center;gap:11px;padding:11px 13px;border-radius:var(--r-s);
+    color:#dce8e4;font-size:14px;font-weight:500;margin-bottom:3px;
+  }
+  .nav-item i{width:18px;text-align:center;font-size:14.5px;}
+  .nav-item.active{background:rgba(255,255,255,0.12);color:#fff;}
+  .nav-item:not(.active):hover{background:rgba(255,255,255,0.06);cursor:pointer;}
+
+  .content{flex:1;padding:26px 30px 60px;max-width:1180px;}
+  @media (max-width: 860px){
+    .sidebar{width:64px;}
+    .nav-item span{display:none;}
+    .nav-item{justify-content:center;padding:12px 0;}
+    .content{padding:18px 14px 50px;}
+    .topbar-title small{display:none;}
+  }
+
+  /* ---------- hero / cards ---------- */
+  .hero{
+    background:linear-gradient(120deg, var(--pine-deep), var(--pine) 130%);
+    border-radius:var(--r-l);padding:26px 28px;color:#fff;position:relative;overflow:hidden;
+    margin-bottom:22px;
+  }
+  .hero::after{
+    content:"";position:absolute;inset:0;
+    background-image:radial-gradient(circle at 1px 1px, rgba(255,255,255,0.13) 1px, transparent 1px);
+    background-size:16px 16px;pointer-events:none;
+  }
+  .hero-eyebrow{position:relative;font-size:12.5px;color:#b9cec7;margin-bottom:6px;}
+  .hero h2{position:relative;font-size:23px;font-weight:600;color:#fff;}
+  .hero p{position:relative;margin:8px 0 0;font-size:13.5px;color:#c9d8d2;max-width:520px;line-height:1.55;}
+
+  .grid{display:grid;gap:16px;}
+  .grid-2{grid-template-columns:1fr 1fr;}
+  .grid-3{grid-template-columns:repeat(3,1fr);}
+  .grid-4{grid-template-columns:repeat(4,1fr);}
+  @media (max-width:860px){.grid-2,.grid-3,.grid-4{grid-template-columns:1fr;}}
+
+  .panel{
+    background:#fff;border:1px solid var(--line);border-radius:var(--r-m);
+    padding:20px 20px 22px;
+  }
+  .panel-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:10px;flex-wrap:wrap;}
+  .panel-head h3{font-size:16.5px;font-weight:600;}
+  .panel-head .sub{font-size:12.5px;color:var(--ink-faint);margin-top:2px;}
+
+  .stat-card{
+    background:#fff;border:1px solid var(--line);border-radius:var(--r-m);
+    padding:16px 18px;border-left:4px solid var(--pine);
+  }
+  .stat-card.gold{border-left-color:var(--gold);}
+  .stat-card.brick{border-left-color:var(--brick);}
+  .stat-card .stat-label{font-size:12px;color:var(--ink-faint);font-weight:600;}
+  .stat-card .stat-value{font-family:'Fraunces',serif;font-size:26px;margin-top:4px;}
+  .stat-card .stat-note{font-size:11.5px;color:var(--ink-faint);margin-top:2px;}
+
+  .person-row{display:flex;align-items:center;gap:12px;}
+  .avatar{
+    width:44px;height:44px;border-radius:50%;background:var(--pine-soft);color:var(--pine);
+    display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;flex-shrink:0;
+  }
+  .avatar.small{width:32px;height:32px;font-size:12.5px;}
+  .avatar.gold{background:var(--gold-soft);color:#7a5713;}
+
+  .badge{
+    display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:100px;
+    font-size:11.5px;font-weight:600;
+  }
+  .badge-green{background:var(--pine-soft);color:var(--pine);}
+  .badge-gold{background:var(--gold-soft);color:#7a5713;}
+  .badge-brick{background:var(--brick-soft);color:var(--brick);}
+
+  .announce-item{
+    padding:12px 0;border-bottom:1px solid var(--line);
+  }
+  .announce-item:last-child{border-bottom:none;}
+  .announce-item .a-title{font-weight:600;font-size:14px;}
+  .announce-item .a-date{font-size:11.5px;color:var(--ink-faint);margin-top:1px;}
+  .announce-item .a-body{font-size:13px;color:var(--ink-soft);margin-top:5px;line-height:1.5;}
+
+  table{width:100%;border-collapse:collapse;font-size:13.5px;}
+  thead th{
+    text-align:left;font-size:11.5px;color:var(--ink-faint);font-weight:700;
+    padding:0 10px 9px;border-bottom:1.5px solid var(--line);white-space:nowrap;
+  }
+  tbody td{padding:11px 10px;border-bottom:1px solid var(--line);vertical-align:middle;}
+  tbody tr:last-child td{border-bottom:none;}
+  .table-scroll{overflow-x:auto;}
+  .action-icon{
+    width:32px;height:32px;border-radius:8px;border:1px solid var(--line);background:#fff;
+    display:inline-flex;align-items:center;justify-content:center;color:var(--pine);font-size:13.5px;
+    margin-right:5px;
+  }
+  .action-icon:hover{background:var(--pine-soft);}
+  .action-icon.gold{color:#7a5713;}
+  .action-icon.gold:hover{background:var(--gold-soft);}
+  .action-icon.brick{color:var(--brick);}
+  .action-icon.brick:hover{background:var(--brick-soft);}
+
+  /* ---------- modal ---------- */
+  .modal-backdrop{
+    display:none;position:fixed;inset:0;background:rgba(18,30,27,0.55);
+    z-index:100;align-items:flex-start;justify-content:center;padding:36px 16px;overflow-y:auto;
+  }
+  .modal-backdrop.open{display:flex;}
+  .modal-box{
+    background:var(--paper);border-radius:var(--r-l);max-width:560px;width:100%;
+    box-shadow:0 30px 60px rgba(0,0,0,0.35);overflow:hidden;
+  }
+  .modal-box.wide{max-width:680px;}
+  .modal-head{
+    padding:18px 22px;background:var(--pine-deep);color:#fff;
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .modal-head h3{font-size:16px;font-weight:600;color:#fff;}
+  .modal-head .sub{font-size:12px;color:#a9bdb6;margin-top:2px;}
+  .modal-close{background:rgba(255,255,255,0.1);border:none;color:#fff;width:30px;height:30px;border-radius:50%;}
+  .modal-body{padding:22px;max-height:70vh;overflow-y:auto;}
+  .modal-foot{padding:14px 22px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:10px;}
+
+  .tabs{display:flex;gap:6px;margin-bottom:16px;border-bottom:1.5px solid var(--line);}
+  .tab-btn{
+    background:none;border:none;padding:9px 4px;margin-right:14px;font-size:13.5px;font-weight:600;
+    color:var(--ink-faint);border-bottom:2.5px solid transparent;margin-bottom:-1.5px;
+  }
+  .tab-btn.active{color:var(--pine);border-bottom-color:var(--pine);}
+
+  .page-viewer{
+    background:var(--pine-deep);border-radius:var(--r-m);padding:26px;text-align:center;color:#fff;
+    position:relative;overflow:hidden;margin-bottom:16px;
+  }
+  .page-viewer::after{
+    content:"";position:absolute;inset:0;
+    background-image:radial-gradient(circle at 1px 1px, rgba(255,255,255,0.1) 1px, transparent 1px);
+    background-size:14px 14px;
+  }
+  .page-viewer .pv-book{position:relative;font-size:11.5px;color:#a9bdb6;letter-spacing:.02em;}
+  .page-viewer .pv-page{position:relative;font-family:'Fraunces',serif;font-size:46px;margin:6px 0 2px;color:#fff;}
+  .page-viewer .pv-note{position:relative;font-size:11.5px;color:#c9d8d2;}
+
+  .form-row{margin-bottom:14px;}
+  .form-row label{display:block;font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:5px;}
+  .form-row input, .form-row select, .form-row textarea{
+    width:100%;padding:10px 12px;border-radius:var(--r-s);border:1px solid var(--line);
+    background:#fff;font-size:14px;outline:none;
+  }
+  .form-row input:focus, .form-row select:focus, .form-row textarea:focus{border-color:var(--pine);box-shadow:0 0 0 3px var(--pine-soft);}
+  .form-row textarea{resize:vertical;min-height:70px;}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+
+  .mic-box{
+    display:flex;align-items:center;gap:14px;background:var(--paper-deep);border-radius:var(--r-m);
+    padding:14px 16px;margin-bottom:10px;
+  }
+  .mic-circle{
+    width:48px;height:48px;border-radius:50%;background:var(--brick);color:#fff;border:none;
+    display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;
+  }
+  .mic-circle.recording{animation:pulse 1.1s infinite;}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(168,69,47,0.5);}70%{box-shadow:0 0 0 12px rgba(168,69,47,0);}100%{box-shadow:0 0 0 0 rgba(168,69,47,0);}}
+  .wave{display:flex;align-items:center;gap:3px;height:26px;flex:1;}
+  .wave span{width:3px;background:var(--pine);border-radius:2px;height:6px;}
+  .mic-time{font-variant-numeric:tabular-nums;font-size:13px;color:var(--ink-soft);}
+
+  .voice-msg{
+    display:flex;align-items:center;gap:10px;background:var(--pine-soft);border-radius:100px;
+    padding:7px 13px 7px 7px;font-size:12.5px;color:var(--pine);width:fit-content;
+  }
+  .voice-msg .vm-play{width:24px;height:24px;border-radius:50%;background:var(--pine);color:#fff;border:none;display:flex;align-items:center;justify-content:center;font-size:10px;}
+
+  .qr-box{
+    width:170px;height:170px;margin:0 auto 14px;background:#fff;border-radius:var(--r-s);
+    padding:10px;border:1px solid var(--line);
+  }
+  .qr-box img{width:100%;height:100%;object-fit:contain;}
+
+  .upload-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+  .upload-current{
+    font-size:12px;color:var(--ink-faint);background:var(--paper-deep);border:1px solid var(--line);
+    border-radius:100px;padding:5px 12px;
+  }
+  .file-input{
+    font-size:12.5px;padding:8px 10px;border:1px dashed var(--line);border-radius:var(--r-s);
+    background:#fff;width:100%;max-width:220px;
+  }
+  .upload-preview-row{display:flex;align-items:center;gap:14px;margin-top:6px;}
+  .logo-preview{
+    width:56px;height:56px;border-radius:50%;background:var(--pine-deep);color:var(--gold-soft);
+    display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:18px;
+    flex-shrink:0;overflow:hidden;border:1.5px solid var(--gold);
+  }
+  .logo-preview img{width:100%;height:100%;object-fit:cover;}
+  .qris-preview{
+    width:56px;height:56px;border-radius:var(--r-s);background:var(--paper-deep);color:var(--ink-faint);
+    display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;overflow:hidden;
+    border:1px solid var(--line);
+  }
+  .qris-preview img{width:100%;height:100%;object-fit:contain;}
+  .setting-label{display:block;font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;}
+
+  /* ---------- accessibility & polish ---------- */
+  :focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:4px;}
+  @media (prefers-reduced-motion: reduce){
+    .mic-circle.recording{animation:none;box-shadow:0 0 0 4px rgba(168,69,47,0.35);}
+    *{scroll-behavior:auto !important;}
+  }
+  html{scroll-behavior:smooth;}
+  ::-webkit-scrollbar{width:9px;height:9px;}
+  ::-webkit-scrollbar-thumb{background:var(--line);border-radius:100px;}
+  ::-webkit-scrollbar-track{background:transparent;}
+
+  .empty-note{padding:24px;text-align:center;color:var(--ink-faint);font-size:13px;}
+
+  .toast{
+    position:fixed;bottom:22px;left:50%;transform:translateX(-50%);
+    background:var(--pine-deep);color:#fff;padding:12px 20px;border-radius:100px;font-size:13.5px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.25);z-index:200;display:none;align-items:center;gap:8px;
+  }
+  .toast.show{display:flex;}
+  .toast i{color:var(--gold-soft);}
+</style>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage-compat.js"></script>
+</head>
+<body>
+
+<!-- ======================= LOGIN ======================= -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-mark">
+      <div class="login-badge" id="login-badge-el">TW</div>
+      <h1>TPQ Wardatul Wathon</h1>
+      <p>Tukum Kidul, Lumajang — portal pembelajaran santri</p>
+    </div>
+    <div class="login-body">
+      <div class="field">
+        <label>Akun tersimpan pada perangkat ini</label>
+        <div class="field-static" id="account-display">Belum ada akun perangkat</div><input type="text" id="device-username" placeholder="Masukkan username akun" autocomplete="username" style="display:none;margin-top:8px;">
+      </div>
+      <div class="field">
+        <label>Kata sandi</label>
+        <input type="password" id="login-password" placeholder="Masukkan kata sandi" autocomplete="current-password">
+      </div>
+      <div class="login-error" id="login-error">Kata sandi salah. Coba lagi.</div>
+      <button class="btn btn-primary" onclick="doLogin()">Masuk</button>
+      <div class="login-demo-note" id="login-note">Username akun ditetapkan admin dan disimpan pada perangkat. Pengguna cukup memasukkan kata sandi.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================= APP SHELL ======================= -->
+<div id="app-shell">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-mark" id="topbar-mark-el">TW</div>
+      <div class="topbar-title">TPQ Wardatul Wathon<small id="topbar-role-label">Portal</small></div>
+    </div>
+    <div class="topbar-right">
+      <div class="topbar-user"><b id="topbar-username">-</b><span id="topbar-usersub">-</span></div>
+      <button class="icon-btn" title="Keluar" onclick="doLogout()"><i class="fa-solid fa-right-from-bracket"></i></button>
+    </div>
+  </div>
+  <div class="shell-body">
+    <div class="sidebar" id="sidebar"></div>
+    <div class="content" id="content"></div>
+  </div>
+</div>
+
+<!-- ======================= MODAL ======================= -->
+<div class="modal-backdrop" id="modal-backdrop">
+  <div class="modal-box" id="modal-box"></div>
+</div>
+
+<div class="toast" id="toast"><i class="fa-solid fa-circle-check"></i><span id="toast-text"></span></div>
+
+<script>
+/* ============================================================
+   MOCK DATABASE
+   ============================================================ */
+const LEGACY_DB = {
+  jilid: [
+    { id:'j1', nama:'Jilid 1', ustadzahId:'u2', bukuBacaan:'Iqro Jilid 1.pdf', bukuHafalan:'Juz Amma (Pemula).pdf' },
+    { id:'j2', nama:'Jilid 2', ustadzahId:'u1', bukuBacaan:'Iqro Jilid 2.pdf', bukuHafalan:'Juz Amma.pdf' },
+  ],
+  ustadzah: [
+    { id:'u1', nama:'Ustadzah Aminah', username:'ustadzah.aminah', hp:'0812-3456-7801', jilidId:'j2' },
+    { id:'u2', nama:'Ustadzah Fatimah', username:'ustadzah.fatimah', hp:'0812-3456-7802', jilidId:'j1' },
+  ],
+  santri: [
+    { id:'s1', nama:'Muhammad Rizki', jilidId:'j2', waliId:'w1' },
+    { id:'s2', nama:'Ahmad Zaki', jilidId:'j2', waliId:'w3' },
+    { id:'s3', nama:'Nur Aini', jilidId:'j2', waliId:'w4' },
+    { id:'s4', nama:'Bilal Ramadhan', jilidId:'j2', waliId:'w5' },
+    { id:'s5', nama:'Khadijah Putri', jilidId:'j2', waliId:'w6' },
+    { id:'s6', nama:'Fatimah Azzahra', jilidId:'j1', waliId:'w2' },
+    { id:'s7', nama:'Umar Faruq', jilidId:'j1', waliId:'w7' },
+    { id:'s8', nama:'Zainab Salsabila', jilidId:'j1', waliId:'w8' },
+  ],
+  wali: [
+    { id:'w1', nama:'Bpk. Ahmad Fauzi', username:'wali.ahmad', hp:'0813-1111-0001', santriId:'s1' },
+    { id:'w2', nama:'Ibu Siti Aisyah', username:'wali.siti', hp:'0813-1111-0002', santriId:'s6' },
+    { id:'w3', nama:'Bpk. Hendra Saputra', username:'wali.hendra', hp:'0813-1111-0003', santriId:'s2' },
+    { id:'w4', nama:'Ibu Ratna Sari', username:'wali.ratna', hp:'0813-1111-0004', santriId:'s3' },
+    { id:'w5', nama:'Bpk. Dedi Kurniawan', username:'wali.dedi', hp:'0813-1111-0005', santriId:'s4' },
+    { id:'w6', nama:'Ibu Yuli Astuti', username:'wali.yuli', hp:'0813-1111-0006', santriId:'s5' },
+    { id:'w7', nama:'Bpk. Agus Salim', username:'wali.agus', hp:'0813-1111-0007', santriId:'s7' },
+    { id:'w8', nama:'Ibu Nur Hasanah', username:'wali.nur', hp:'0813-1111-0008', santriId:'s8' },
+  ],
+  admin: [{ id:'a1', nama:'Admin TPQ', username:'admin.tpq' }],
+  // riwayat ngaji: bacaan & hafalan digabung per-jenis, terbaru di depan
+  riwayat: {
+    s1: {
+      bacaan: [
+        { halaman:14, status:'naik', pesan:'Bacaan tajwidnya sudah rapi, lanjut ke halaman berikutnya ya nak.', pesanTipe:'teks', tanggal:'2026-09-15' },
+        { halaman:13, status:'mengulang', pesan:'Pesan suara (0:24)', pesanTipe:'suara', tanggal:'2026-09-12' },
+        { halaman:13, status:'naik', pesan:'Alhamdulillah lancar, pertahankan.', pesanTipe:'teks', tanggal:'2026-09-10' },
+      ],
+      hafalan: [
+        { halaman:5, status:'naik', pesan:'Hafalan An-Naba ayat 1-5 sudah lancar.', pesanTipe:'teks', tanggal:'2026-09-14' },
+      ]
+    },
+    s6: {
+      bacaan: [
+        { halaman:9, status:'mengulang', pesan:'Perhatikan panjang pendek bacaan di baris ketiga.', pesanTipe:'teks', tanggal:'2026-09-15' },
+        { halaman:9, status:'naik', pesan:'Pesan suara (0:31)', pesanTipe:'suara', tanggal:'2026-09-11' },
+      ],
+      hafalan: [
+        { halaman:2, status:'naik', pesan:'Hafalan An-Nas sudah lancar sekali.', pesanTipe:'teks', tanggal:'2026-09-13' },
+      ]
+    }
+  },
+  // keuangan per santri
+  keuangan: {
+    s1: [
+      { id:'k1', jenis:'SPP', label:'SPP September 2026', nominal:150000, status:'lunas', metode:'QRIS', tanggal:'2026-09-05' },
+      { id:'k2', jenis:'SPP', label:'SPP Agustus 2026', nominal:150000, status:'lunas', metode:'QRIS', tanggal:'2026-08-04' },
+      { id:'k3', jenis:'Tabungan', label:'Tabungan September 2026', nominal:50000, status:'belum', metode:'-', tanggal:'-' },
+      { id:'k4', jenis:'Iuran', label:'Iuran Peringatan Maulid Nabi', nominal:25000, status:'belum', metode:'-', tanggal:'-' },
+    ],
+    s6: [
+      { id:'k5', jenis:'SPP', label:'SPP September 2026', nominal:150000, status:'belum', metode:'-', tanggal:'-' },
+      { id:'k6', jenis:'SPP', label:'SPP Agustus 2026', nominal:150000, status:'lunas', metode:'QRIS', tanggal:'2026-08-08' },
+      { id:'k7', jenis:'Tabungan', label:'Tabungan September 2026', nominal:50000, status:'lunas', metode:'QRIS', tanggal:'2026-09-02' },
+    ],
+  },
+  pengumuman: [
+    { id:'p1', judul:'Libur Maulid Nabi Muhammad SAW', tanggal:'2026-09-14', isi:'Kegiatan mengaji diliburkan pada hari Senin, 15 September 2026 dalam rangka peringatan Maulid Nabi. Kegiatan aktif kembali hari Selasa.' },
+    { id:'p2', judul:'Pembayaran SPP September', tanggal:'2026-09-01', isi:'Mohon wali santri menyelesaikan pembayaran SPP bulan September paling lambat tanggal 10 melalui menu Riwayat Keuangan.' },
+    { id:'p3', judul:'Khataman Akbar Akhir Tahun', tanggal:'2026-08-28', isi:'TPQ akan mengadakan Khataman Akbar pada bulan Oktober. Info lebih lanjut menyusul melalui pengumuman berikutnya.' },
+  ],
+  settings: {
+    logo: null,   // data URL logo lembaga, diatur admin
+    qris: null,   // data URL gambar QRIS statis lembaga, diatur admin
+    spp: { nominal:150000, jatuhTempo:10 },
+    tabungan: { minSetor:20000, keterangan:'Setoran tabungan bersifat sukarela, dapat diambil di akhir semester.' },
+    iuran: [
+      { id:'ik1', nama:'Iuran Peringatan Maulid Nabi', nominal:25000, deadline:'2026-09-30' },
+      { id:'ik2', nama:'Iuran Khataman Akbar', nominal:15000, deadline:'2026-10-15' },
+    ]
+  }
+};
+
+const DB = {
+  jilid:[],
+  ustadzah:[],
+  santri:[],
+  wali:[],
+  admin:[],
+  riwayat:{},
+  keuangan:{},
+  pengumuman:[],
+  settings:{
+    logo:null,
+    qris:null,
+    spp:{nominal:150000,jatuhTempo:10},
+    tabungan:{minSetor:20000,keterangan:"Setoran tabungan bersifat sukarela, dapat diambil di akhir semester."},
+    iuran:[]
+  }
+};
+
+let session = null;     // { role, id, nama, username }
+let ui = { adminTab:'dashboard', financeTab:'SPP', selectedSantriId:null, recording:false, recordSeconds:0, recordTimer:null };
+
+/* ============================================================
+   HELPERS
+   ============================================================ */
+function rupiah(n){ return 'Rp' + n.toLocaleString('id-ID'); }
+function tglIndo(iso){
+  if(!iso || iso==='-') return '-';
+  const bln=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+  const d=new Date(iso+'T00:00:00');
+  return d.getDate()+' '+bln[d.getMonth()]+' '+d.getFullYear();
+}
+function initials(name){ return name.split(' ').filter(w=>!/^(bpk\.|ibu)$/i.test(w)).slice(0,2).map(w=>w[0]).join('').toUpperCase(); }
+function findSantri(id){ return DB.santri.find(s=>s.id===id); }
+function findJilid(id){ return DB.jilid.find(j=>j.id===id); }
+function findUstadzah(id){ return DB.ustadzah.find(u=>u.id===id); }
+function findWali(id){ return DB.wali.find(w=>w.id===id); }
+function applyBranding(){
+  const badge = document.getElementById('login-badge-el');
+  const mark = document.getElementById('topbar-mark-el');
+  const inner = DB.settings.logo ? `<img src="${DB.settings.logo}" alt="Logo TPQ Wardatul Wathon" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">` : 'TW';
+  if(badge) badge.innerHTML = inner;
+  if(mark) mark.innerHTML = inner;
+}
+function showToast(msg){
+  const t=document.getElementById('toast');
+  document.getElementById('toast-text').textContent=msg;
+  t.classList.add('show');
+  clearTimeout(window._toastTimer);
+  window._toastTimer=setTimeout(()=>t.classList.remove('show'),2600);
+}
+function openModal(html, wide){
+  document.getElementById('modal-box').className = 'modal-box' + (wide?' wide':'');
+  document.getElementById('modal-box').innerHTML = html;
+  document.getElementById('modal-backdrop').classList.add('open');
+}
+function closeModal(){
+  document.getElementById('modal-backdrop').classList.remove('open');
+  if(ui.recordTimer){ clearInterval(ui.recordTimer); ui.recordTimer=null; }
+  ui.recording=false; ui.recordSeconds=0;
+}
+document.getElementById('modal-backdrop').addEventListener('click', function(e){
+  if(e.target===this) closeModal();
+});
+document.addEventListener('keydown', function(e){
+  if(e.key==='Escape' && document.getElementById('modal-backdrop').classList.contains('open')) closeModal();
+});
+
+/* ============================================================
+   LOGIN / LOGOUT
+   ============================================================ */
+function onPickAccount(){}
+function doLogin(){
+  const uname = document.getElementById('demo-account-picker').value;
+  const pass = document.getElementById('login-password').value;
+  if(pass !== '123456'){
+    document.getElementById('login-error').style.display='block';
+    return;
+  }
+  document.getElementById('login-error').style.display='none';
+
+  let found=null, role=null;
+  found = DB.wali.find(w=>w.username===uname); if(found) role='wali';
+  if(!found){ found = DB.ustadzah.find(u=>u.username===uname); if(found) role='ustadzah'; }
+  if(!found){ found = DB.admin.find(a=>a.username===uname); if(found) role='admin'; }
+
+  session = { role, id:found.id, nama:found.nama, username:found.username };
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('app-shell').style.display='block';
+
+  const roleLabel = role==='wali' ? 'Portal Wali' : role==='ustadzah' ? 'Portal Ustadzah' : 'Portal Admin';
+  document.getElementById('topbar-role-label').textContent = roleLabel;
+  document.getElementById('topbar-username').textContent = found.nama;
+  document.getElementById('topbar-usersub').textContent = '@'+found.username;
+
+  renderSidebar();
+  if(role==='wali') renderWaliDashboard();
+  if(role==='ustadzah') renderUstadzahDashboard();
+  if(role==='admin'){ ui.adminTab='dashboard'; renderAdmin(); }
+}
+function doLogout(){
+  session=null;
+  document.getElementById('app-shell').style.display='none';
+  document.getElementById('login-screen').style.display='flex';
+  document.getElementById('login-password').value='123456';
+}
+
+/* ============================================================
+   SIDEBAR
+   ============================================================ */
+function renderSidebar(){
+  const sb = document.getElementById('sidebar');
+  if(session.role==='wali'){
+    sb.innerHTML = `<div class="nav-item active"><i class="fa-solid fa-house"></i><span>Dashboard</span></div>`;
+  } else if(session.role==='ustadzah'){
+    sb.innerHTML = `<div class="nav-item active"><i class="fa-solid fa-house"></i><span>Dashboard</span></div>`;
+  } else {
+    const items=[
+      {k:'dashboard', icon:'fa-house', label:'Dashboard'},
+      {k:'santri', icon:'fa-child-reaching', label:'Data Santri'},
+      {k:'guru', icon:'fa-chalkboard-user', label:'Data Guru'},
+      {k:'jilid', icon:'fa-layer-group', label:'Jilid / Kelas'},
+      {k:'pengaturan', icon:'fa-gear', label:'Pengaturan'},
+    ];
+    sb.innerHTML = items.map(it=>`
+      <div class="nav-item ${ui.adminTab===it.k?'active':''}" onclick="setAdminTab('${it.k}')">
+        <i class="fa-solid ${it.icon}"></i><span>${it.label}</span>
+      </div>`).join('');
+  }
+}
+function setAdminTab(k){ ui.adminTab=k; renderSidebar(); renderAdmin(); }
+
+/* ============================================================
+   PORTAL WALI
+   ============================================================ */
+function renderWaliDashboard(){
+  const wali = findWali(session.id);
+  const santri = findSantri(wali.santriId);
+  const jilid = findJilid(santri.jilidId);
+  const ustadzah = findUstadzah(jilid.ustadzahId);
+  const riwayatBacaan = (DB.riwayat[santri.id]?.bacaan)||[];
+  const keuangan = DB.keuangan[santri.id]||[];
+
+  const c = document.getElementById('content');
+  c.innerHTML = `
+    <div class="hero">
+      <div class="hero-eyebrow">Assalamu'alaikum, ${wali.nama}</div>
+      <h2>${santri.nama}</h2>
+      <p>Sedang menempuh ${jilid.nama}, didampingi oleh ${ustadzah.nama}. Pantau perkembangan mengaji dan riwayat pembayaran di bawah ini.</p>
+    </div>
+
+    <div class="grid grid-2" style="margin-bottom:16px;">
+      <div class="panel">
+        <div class="panel-head"><h3>Ustadzah pendamping</h3></div>
+        <div class="person-row">
+          <div class="avatar gold">${initials(ustadzah.nama)}</div>
+          <div>
+            <div style="font-weight:600;font-size:14.5px;">${ustadzah.nama}</div>
+            <div style="font-size:12.5px;color:var(--ink-faint);">Pengampu ${jilid.nama} · ${ustadzah.hp}</div>
+          </div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><h3>Pengumuman</h3><span class="badge badge-gold"><i class="fa-solid fa-bell"></i> ${DB.pengumuman.length} info</span></div>
+        <div style="max-height:150px;overflow-y:auto;">
+          ${DB.pengumuman.slice(0,3).map(p=>`
+            <div class="announce-item">
+              <div class="a-title">${p.judul}</div>
+              <div class="a-date">${tglIndo(p.tanggal)}</div>
+              <div class="a-body">${p.isi}</div>
+            </div>`).join('')}
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-bottom:16px;">
+      <div class="panel-head">
+        <div><h3>Riwayat ngaji</h3><div class="sub">Bacaan terakhir ${jilid.nama}</div></div>
+      </div>
+      <div class="table-scroll">
+      <table>
+        <thead><tr><th>No.</th><th>Halaman terakhir</th><th>Status</th><th>Pesan ustadzah</th><th>Lihat halaman</th></tr></thead>
+        <tbody>
+          ${riwayatBacaan.length===0 ? `<tr><td colspan="5"><div class="empty-note">Belum ada riwayat ngaji.</div></td></tr>` :
+          riwayatBacaan.map((r,i)=>`
+            <tr>
+              <td>${i+1}</td>
+              <td>Halaman ${r.halaman}</td>
+              <td>${r.status==='naik' ? '<span class="badge badge-green"><i class="fa-solid fa-arrow-up"></i> Naik</span>' : '<span class="badge badge-brick"><i class="fa-solid fa-rotate-left"></i> Mengulang</span>'}</td>
+              <td>${r.pesanTipe==='suara' ? `<div class="voice-msg"><button class="vm-play" onclick="showToast('Memutar pesan suara (simulasi)')"><i class="fa-solid fa-play"></i></button>${r.pesan}</div>` : r.pesan}</td>
+              <td><button class="btn btn-ghost btn-sm" onclick="viewPage('${jilid.bukuBacaan}', ${r.halaman})"><i class="fa-solid fa-eye"></i> Lihat</button></td>
+            </tr>`).join('')}
+        </tbody>
+      </table>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head"><div><h3>Riwayat keuangan</h3><div class="sub">Tagihan SPP &amp; tabungan</div></div></div>
+      <div class="table-scroll">
+      <table>
+        <thead><tr><th>No.</th><th>Tagihan bulanan</th><th>Nilai tagihan</th><th>Terbayar</th><th>Aksi</th></tr></thead>
+        <tbody>
+          ${keuangan.map((k,i)=>`
+            <tr>
+              <td>${i+1}</td>
+              <td>${k.label}</td>
+              <td>${rupiah(k.nominal)}</td>
+              <td>${k.status==='lunas'
+                  ? `<span class="badge badge-green"><i class="fa-solid fa-circle-check"></i> Lunas · ${tglIndo(k.tanggal)}</span>`
+                  : `<span class="badge badge-brick"><i class="fa-solid fa-circle-exclamation"></i> Belum bayar</span>`}</td>
+              <td>${k.status==='lunas'
+                  ? `<span style="font-size:12px;color:var(--ink-faint);">via ${k.metode}</span>`
+                  : `<button class="btn btn-gold btn-sm" onclick="openQrisModal('${k.id}','${santri.id}')"><i class="fa-solid fa-qrcode"></i> Bayar QRIS</button>`}</td>
+            </tr>`).join('')}
+        </tbody>
+      </table>
+      </div>
+    </div>
+  `;
+}
+
+function viewPage(buku, halaman){
+  openModal(`
+    <div class="modal-head">
+      <div><h3>Halaman terakhir dibaca</h3><div class="sub">${buku}</div></div>
+      <button class="modal-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="page-viewer">
+        <div class="pv-book">${buku}</div>
+        <div class="pv-page">Hal. ${halaman}</div>
+        <div class="pv-note">Pratinjau halaman ditampilkan di aplikasi asli menggunakan file PDF yang diunggah admin.</div>
+      </div>
+      <p style="font-size:13px;color:var(--ink-soft);line-height:1.6;">Ini adalah tampilan sederhana untuk prototype. Pada aplikasi final, halaman ini akan menampilkan cuplikan halaman PDF sesuai buku yang diatur admin untuk jilid santri.</p>
+    </div>
+  `);
+}
+
+function openQrisModal(keuanganId, santriId){
+  const item = DB.keuangan[santriId].find(k=>k.id===keuanganId);
+  const qrInner = DB.settings.qris ? `<img src="${DB.settings.qris}" alt="Kode QRIS TPQ Wardatul Wathon">` : `
+        <svg viewBox="0 0 100 100" width="100%" height="100%">
+          <rect width="100" height="100" fill="#fff"/>
+          <g fill="#12332D">
+            <rect x="4" y="4" width="24" height="24"/><rect x="72" y="4" width="24" height="24"/><rect x="4" y="72" width="24" height="24"/>
+            <rect x="10" y="10" width="12" height="12" fill="#fff"/><rect x="78" y="10" width="12" height="12" fill="#fff"/><rect x="10" y="78" width="12" height="12" fill="#fff"/>
+            <rect x="36" y="4" width="6" height="6"/><rect x="48" y="4" width="6" height="6"/><rect x="60" y="10" width="6" height="6"/>
+            <rect x="36" y="16" width="6" height="6"/><rect x="54" y="22" width="6" height="6"/><rect x="42" y="34" width="6" height="6"/>
+            <rect x="60" y="34" width="6" height="6"/><rect x="72" y="40" width="6" height="6"/><rect x="84" y="46" width="6" height="6"/>
+            <rect x="36" y="46" width="6" height="6"/><rect x="48" y="52" width="6" height="6"/><rect x="4" y="40" width="6" height="6"/>
+            <rect x="16" y="46" width="6" height="6"/><rect x="4" y="58" width="6" height="6"/><rect x="60" y="60" width="6" height="6"/>
+            <rect x="72" y="66" width="6" height="6"/><rect x="84" y="72" width="6" height="6"/><rect x="36" y="66" width="6" height="6"/>
+            <rect x="48" y="72" width="6" height="6"/><rect x="60" y="84" width="6" height="6"/><rect x="72" y="90" width="6" height="6"/>
+            <rect x="42" y="90" width="6" height="6"/>
+          </g>
+        </svg>`;
+  openModal(`
+    <div class="modal-head">
+      <div><h3>Pembayaran QRIS</h3><div class="sub">${item.label}</div></div>
+      <button class="modal-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-body" style="text-align:center;">
+      <div class="qr-box">${qrInner}</div>
+      <div style="font-size:13px;color:var(--ink-faint);">Nominal tagihan</div>
+      <div style="font-family:'Fraunces',serif;font-size:26px;margin:2px 0 14px;">${rupiah(item.nominal)}</div>
+      <p style="font-size:12.5px;color:var(--ink-soft);line-height:1.6;">Pindai kode QRIS di atas menggunakan aplikasi m-banking atau e-wallet mana pun. Status pembayaran akan diperbarui otomatis setelah pembayaran berhasil.</p>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeModal()">Tutup</button>
+      <button class="btn btn-primary" onclick="simulateBayar('${keuanganId}','${santriId}')">Simulasikan pembayaran berhasil</button>
+    </div>
+  `);
+}
+function simulateBayar(keuanganId, santriId){
+  const item = DB.keuangan[santriId].find(k=>k.id===keuanganId);
+  item.status='lunas'; item.metode='QRIS'; item.tanggal=new Date().toISOString().slice(0,10);
+  closeModal();
+  showToast('Pembayaran berhasil dicatat via QRIS');
+  renderWaliDashboard();
+}
+
+/* ============================================================
+   PORTAL USTADZAH
+   ============================================================ */
+function renderUstadzahDashboard(){
+  const ustadzah = findUstadzah(session.id);
+  const jilid = findJilid(ustadzah.jilidId);
+  const daftarSantri = DB.santri.filter(s=>s.jilidId===jilid.id);
+
+  const c = document.getElementById('content');
+  c.innerHTML = `
+    <div class="hero">
+      <div class="hero-eyebrow">Assalamu'alaikum, ${ustadzah.nama}</div>
+      <h2>${jilid.nama}</h2>
+      <p>Anda mengampu ${daftarSantri.length} santri pada kelas ini. Kelola bacaan, hafalan, dan keuangan santri langsung dari daftar di bawah.</p>
+    </div>
+
+    <div class="grid grid-3" style="margin-bottom:16px;">
+      <div class="stat-card">
+        <div class="stat-label">Jumlah santri</div>
+        <div class="stat-value">${daftarSantri.length}</div>
+        <div class="stat-note">di ${jilid.nama}</div>
+      </div>
+      <div class="stat-card gold">
+        <div class="stat-label">Buku bacaan</div>
+        <div class="stat-value" style="font-size:16px;">${jilid.bukuBacaan}</div>
+        <div class="stat-note">diatur oleh admin</div>
+      </div>
+      <div class="stat-card brick">
+        <div class="stat-label">Buku hafalan</div>
+        <div class="stat-value" style="font-size:16px;">${jilid.bukuHafalan}</div>
+        <div class="stat-note">diatur oleh admin</div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head"><div><h3>Daftar santri</h3><div class="sub">${jilid.nama}</div></div></div>
+      <div class="table-scroll">
+      <table>
+        <thead><tr><th>No.</th><th>Nama santri</th><th>Aksi</th></tr></thead>
+        <tbody>
+          ${daftarSantri.map((s,i)=>`
+            <tr>
+              <td>${i+1}</td>
+              <td>
+                <div class="person-row">
+                  <div class="avatar small">${initials(s.nama)}</div>
+                  <span style="font-weight:600;">${s.nama}</span>
+                </div>
+              </td>
+              <td>
+                <button class="action-icon" title="Buku dibaca" onclick="openBookModal('${s.id}','bacaan')"><i class="fa-solid fa-book-open"></i></button>
+                <button class="action-icon gold" title="Buku dihafal" onclick="openBookModal('${s.id}','hafalan')"><i class="fa-solid fa-bookmark"></i></button>
+                <button class="action-icon brick" title="Keuangan" onclick="openFinanceModal('${s.id}')"><i class="fa-solid fa-wallet"></i></button>
+              </td>
+            </tr>`).join('')}
+        </tbody>
+      </table>
+      </div>
+    </div>
+  `;
+}
+
+function openBookModal(santriId, jenis){
+  ui.selectedSantriId = santriId;
+  const santri = findSantri(santriId);
+  const jilid = findJilid(santri.jilidId);
+  const buku = jenis==='bacaan' ? jilid.bukuBacaan : jilid.bukuHafalan;
+  if(!DB.riwayat[santriId]) DB.riwayat[santriId] = { bacaan:[], hafalan:[] };
+  const list = DB.riwayat[santriId][jenis];
+  const last = list[0] || { halaman:1, status:'naik' };
+  const label = jenis==='bacaan' ? 'Buku dibaca' : 'Buku dihafal';
+
+  openModal(`
+    <div class="modal-head">
+      <div><h3>${label} — ${santri.nama}</h3><div class="sub">${buku}</div></div>
+      <button class="modal-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-body" id="book-modal-body">
+      ${renderBookModalBody(santriId, jenis, buku, last, list)}
+    </div>
+  `, true);
+}
+
+function renderBookModalBody(santriId, jenis, buku, last, list){
+  return `
+    <div class="page-viewer">
+      <div class="pv-book">${buku}</div>
+      <div class="pv-page">Hal. ${last.halaman}</div>
+      <div class="pv-note">Terakhir dibuka — pertemuan berikutnya otomatis membuka halaman ini</div>
+    </div>
+
+    <div class="two-col" style="margin-bottom:14px;">
+      <div class="form-row" style="margin-bottom:0;">
+        <label>Tandai halaman ini</label>
+        <input type="number" id="halaman-input" value="${last.halaman}" min="1">
+      </div>
+      <div class="form-row" style="margin-bottom:0;display:flex;flex-direction:column;">
+        <label>&nbsp;</label>
+        <button class="btn btn-primary" style="width:100%;" onclick="markHalaman('${santriId}','${jenis}')"><i class="fa-solid fa-bookmark"></i> Simpan halaman</button>
+      </div>
+    </div>
+
+    <div class="two-col" style="margin-bottom:16px;">
+      <button class="btn btn-ghost" onclick="addRiwayat('${santriId}','${jenis}','naik')"><i class="fa-solid fa-arrow-up"></i> Tandai naik</button>
+      <button class="btn btn-ghost" onclick="addRiwayat('${santriId}','${jenis}','mengulang')"><i class="fa-solid fa-rotate-left"></i> Tandai mengulang</button>
+    </div>
+
+    <div class="form-row">
+      <label>Pesan untuk wali santri</label>
+      <textarea id="pesan-teks" placeholder="Tuliskan catatan singkat untuk wali santri..."></textarea>
+    </div>
+    <div class="mic-box">
+      <button class="mic-circle ${ui.recording?'recording':''}" id="mic-btn" onclick="toggleRecording('${santriId}','${jenis}')"><i class="fa-solid ${ui.recording?'fa-stop':'fa-microphone'}"></i></button>
+      <div class="wave" id="mic-wave">${wavebars()}</div>
+      <div class="mic-time" id="mic-time">${fmtTime(ui.recordSeconds)}</div>
+    </div>
+    <button class="btn btn-gold" style="width:100%;margin-bottom:18px;" onclick="sendPesan('${santriId}','${jenis}')"><i class="fa-solid fa-paper-plane"></i> Kirim pesan ke wali</button>
+
+    <div class="panel-head" style="margin-bottom:8px;"><h3 style="font-size:14px;">Riwayat</h3></div>
+    <div class="table-scroll">
+    <table>
+      <thead><tr><th>No.</th><th>Halaman</th><th>Status</th><th>Pesan</th><th>Tanggal</th></tr></thead>
+      <tbody>
+        ${list.length===0 ? `<tr><td colspan="5"><div class="empty-note">Belum ada riwayat.</div></td></tr>` :
+        list.map((r,i)=>`
+          <tr>
+            <td>${i+1}</td>
+            <td>Hal. ${r.halaman}</td>
+            <td>${r.status==='naik' ? '<span class="badge badge-green">Naik</span>' : '<span class="badge badge-brick">Mengulang</span>'}</td>
+            <td>${r.pesanTipe==='suara' ? `<div class="voice-msg"><button class="vm-play" onclick="showToast('Memutar pesan suara (simulasi)')"><i class="fa-solid fa-play"></i></button>${r.pesan}</div>` : (r.pesan||'—')}</td>
+            <td style="white-space:nowrap;font-size:12px;color:var(--ink-faint);">${tglIndo(r.tanggal)}</td>
+          </tr>`).join('')}
+      </tbody>
+    </table>
+    </div>
+  `;
+}
+function wavebars(){
+  let h=[8,14,20,12,24,10,18,9,16,22,11,7];
+  return h.map(v=>`<span style="height:${v}px;"></span>`).join('');
+}
+function fmtTime(s){ const m=Math.floor(s/60); const ss=s%60; return m+':'+String(ss).padStart(2,'0'); }
+
+function refreshBookModal(santriId, jenis){
+  const santri = findSantri(santriId);
+  const jilid = findJilid(santri.jilidId);
+  const buku = jenis==='bacaan' ? jilid.bukuBacaan : jilid.bukuHafalan;
+  const list = DB.riwayat[santriId][jenis];
+  const last = list[0] || { halaman:1, status:'naik' };
+  document.getElementById('book-modal-body').innerHTML = renderBookModalBody(santriId, jenis, buku, last, list);
+}
+
+function markHalaman(santriId, jenis){
+  const val = parseInt(document.getElementById('halaman-input').value)||1;
+  if(!DB.riwayat[santriId]) DB.riwayat[santriId]={bacaan:[],hafalan:[]};
+  DB.riwayat[santriId][jenis].unshift({ halaman:val, status:'naik', pesan:'Halaman ditandai oleh ustadzah.', pesanTipe:'teks', tanggal:new Date().toISOString().slice(0,10) });
+  showToast('Halaman terakhir tersimpan — pertemuan berikutnya otomatis dibuka di halaman ini');
+  refreshBookModal(santriId, jenis);
+}
+function addRiwayat(santriId, jenis, status){
+  const list = DB.riwayat[santriId][jenis];
+  const last = list[0] || { halaman:1 };
+  list.unshift({ halaman:last.halaman, status, pesan: status==='naik' ? 'Alhamdulillah, bacaan sudah baik.' : 'Perlu diulang, latihan sedikit lagi ya.', pesanTipe:'teks', tanggal:new Date().toISOString().slice(0,10) });
+  showToast(status==='naik' ? 'Ditandai naik' : 'Ditandai mengulang');
+  refreshBookModal(santriId, jenis);
+}
+function toggleRecording(santriId, jenis){
+  ui.recording = !ui.recording;
+  if(ui.recording){
+    ui.recordSeconds = 0;
+    ui.recordTimer = setInterval(()=>{
+      ui.recordSeconds++;
+      const mt=document.getElementById('mic-time'); if(mt) mt.textContent=fmtTime(ui.recordSeconds);
+      const wv=document.getElementById('mic-wave'); if(wv){ [...wv.children].forEach(b=>b.style.height=(6+Math.random()*20)+'px'); }
+    },350);
+    showToast('Merekam pesan suara...');
+  } else {
+    clearInterval(ui.recordTimer); ui.recordTimer=null;
+    showToast('Rekaman selesai — tekan "Kirim pesan ke wali" untuk mengirim');
+  }
+  refreshBookModal(santriId, jenis);
+}
+function sendPesan(santriId, jenis){
+  const teks = document.getElementById('pesan-teks').value.trim();
+  const list = DB.riwayat[santriId][jenis];
+  const last = list[0] || { halaman:1, status:'naik' };
+  if(ui.recordSeconds>0){
+    list.unshift({ halaman:last.halaman, status:last.status||'naik', pesan:`Pesan suara (${fmtTime(ui.recordSeconds)})`, pesanTipe:'suara', tanggal:new Date().toISOString().slice(0,10) });
+  } else if(teks){
+    list.unshift({ halaman:last.halaman, status:last.status||'naik', pesan:teks, pesanTipe:'teks', tanggal:new Date().toISOString().slice(0,10) });
+  } else {
+    showToast('Tulis pesan atau rekam pesan suara terlebih dahulu'); return;
+  }
+  ui.recording=false; ui.recordSeconds=0; clearInterval(ui.recordTimer); ui.recordTimer=null;
+  showToast('Pesan terkirim ke wali santri');
+  refreshBookModal(santriId, jenis);
+}
+
+/* ---- keuangan (ustadzah view) ---- */
+function openFinanceModal(santriId){
+  ui.selectedSantriId = santriId; ui.financeTab='SPP';
+  const santri = findSantri(santriId);
+  openModal(`
+    <div class="modal-head">
+      <div><h3>Keuangan — ${santri.nama}</h3><div class="sub">SPP, tabungan &amp; iuran kegiatan</div></div>
+      <button class="modal-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-body" id="finance-modal-body">${renderFinanceModalBody(santriId)}</div>
+  `, true);
+}
+function renderFinanceModalBody(santriId){
+  const santri = findSantri(santriId);
+  if(!DB.keuangan[santriId]) DB.keuangan[santriId]=[];
+  const all = DB.keuangan[santriId];
+  const tab = ui.financeTab;
+  const filtered = all.filter(k=>k.jenis===tab);
+
+  let extra='';
+  if(tab==='SPP'){
+    extra = `<p style="font-size:12px;color:var(--ink-faint);margin-bottom:12px;">Nominal SPP: ${rupiah(DB.settings.spp.nominal)} · jatuh tempo tanggal ${DB.settings.spp.jatuhTempo} tiap bulan (diatur admin).</p>`;
+  } else if(tab==='Tabungan'){
+    extra = `<p style="font-size:12px;color:var(--ink-faint);margin-bottom:12px;">Minimal setoran ${rupiah(DB.settings.tabungan.minSetor)}/bulan. ${DB.settings.tabungan.keterangan}</p>`;
+  } else {
+    extra = `<p style="font-size:12px;color:var(--ink-faint);margin-bottom:12px;">Daftar iuran kegiatan aktif diatur oleh admin.</p>`;
+  }
+
+  return `
+    <div class="tabs">
+      <button class="tab-btn ${tab==='SPP'?'active':''}" onclick="setFinanceTab('${santriId}','SPP')">SPP</button>
+      <button class="tab-btn ${tab==='Tabungan'?'active':''}" onclick="setFinanceTab('${santriId}','Tabungan')">Tabungan</button>
+      <button class="tab-btn ${tab==='Iuran'?'active':''}" onclick="setFinanceTab('${santriId}','Iuran')">Iuran kegiatan</button>
+    </div>
+    ${extra}
+    <div class="table-scroll">
+    <table>
+      <thead><tr><th>Label</th><th>Nominal</th><th>Status</th><th>Aksi</th></tr></thead>
+      <tbody>
+        ${filtered.length===0 ? `<tr><td colspan="4"><div class="empty-note">Belum ada catatan.</div></td></tr>` :
+        filtered.map(k=>`
+          <tr>
+            <td>${k.label}</td>
+            <td>${rupiah(k.nominal)}</td>
+            <td>${k.status==='lunas' ? `<span class="badge badge-green">Lunas · ${tglIndo(k.tanggal)}</span>` : `<span class="badge badge-brick">Belum lunas</span>`}</td>
+            <td>${k.status==='lunas' ? `<span style="font-size:12px;color:var(--ink-faint);">via ${k.metode}</span>` : `<button class="btn btn-ghost btn-sm" onclick="markLunas('${santriId}','${k.id}')">Tandai lunas (tunai)</button>`}</td>
+          </tr>`).join('')}
+      </tbody>
+    </table>
+    </div>
+    ${tab==='Tabungan' ? `<button class="btn btn-gold" style="margin-top:14px;" onclick="tambahSetoran('${santriId}')"><i class="fa-solid fa-plus"></i> Catat setoran tabungan baru</button>` : ''}
+  `;
+}
+function setFinanceTab(santriId, tab){ ui.financeTab=tab; document.getElementById('finance-modal-body').innerHTML = renderFinanceModalBody(santriId); }
+function markLunas(santriId, kId){
+  const item = DB.keuangan[santriId].find(k=>k.id===kId);
+  item.status='lunas'; item.metode='Tunai'; item.tanggal=new Date().toISOString().slice(0,10);
+  showToast('Ditandai lunas (tunai)');
+  document.getElementById('finance-modal-body').innerHTML = renderFinanceModalBody(santriId);
+}
+function tambahSetoran(santriId){
+  const bulan=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+  const d=new Date();
+  const id='k'+Math.random().toString(36).slice(2,7);
+  DB.keuangan[santriId].push({ id, jenis:'Tabungan', label:`Tabungan ${bulan[d.getMonth()]} ${d.getFullYear()}`, nominal:DB.settings.tabungan.minSetor, status:'belum', metode:'-', tanggal:'-' });
+  showToast('Tagihan tabungan baru ditambahkan');
+  document.getElementById('finance-modal-body').innerHTML = renderFinanceModalBody(santriId);
+}
+
+/* ============================================================
+   PORTAL ADMIN
+   ============================================================ */
+function renderAdmin(){
+  if(ui.adminTab==='dashboard') return renderAdminDashboard();
+  if(ui.adminTab==='santri') return renderAdminSantri();
+  if(ui.adminTab==='guru') return renderAdminGuru();
+  if(ui.adminTab==='jilid') return renderAdminJilid();
+  if(ui.adminTab==='pengaturan') return renderAdminPengaturan();
+}
+
+function renderAdminDashboard(){
+  const totalSantri = DB.santri.length;
+  const totalGuru = DB.ustadzah.length;
+  const totalJilid = DB.jilid.length;
+  let pendapatan=0;
+  Object.values(DB.keuangan).forEach(list=>list.forEach(k=>{ if(k.status==='lunas') pendapatan+=k.nominal; }));
+
+  const c = document.getElementById('content');
+  c.innerHTML = `
+    <div class="hero">
+      <div class="hero-eyebrow">Assalamu'alaikum, ${findAdminName()}</div>
+      <h2>Ringkasan TPQ Wardatul Wathon</h2>
+      <p>Tukum Kidul, Lumajang — pantau data santri, guru, kelas, dan keuangan dari satu tempat.</p>
+    </div>
+    <div class="grid grid-4" style="margin-bottom:18px;">
+      <div class="stat-card"><div class="stat-label">Total santri</div><div class="stat-value">${totalSantri}</div><div class="stat-note">aktif terdaftar</div></div>
+      <div class="stat-card gold"><div class="stat-label">Total ustadzah</div><div class="stat-value">${totalGuru}</div><div class="stat-note">pengajar aktif</div></div>
+      <div class="stat-card"><div class="stat-label">Jilid / kelas</div><div class="stat-value">${totalJilid}</div><div class="stat-note">kelas berjalan</div></div>
+      <div class="stat-card brick"><div class="stat-label">Pendapatan tercatat</div><div class="stat-value" style="font-size:19px;">${rupiah(pendapatan)}</div><div class="stat-note">dari pembayaran lunas</div></div>
+    </div>
+    <div class="grid grid-2">
+      <div class="panel">
+        <div class="panel-head"><h3>Distribusi santri per jilid</h3></div>
+        ${DB.jilid.map(j=>{
+          const n = DB.santri.filter(s=>s.jilidId===j.id).length;
+          const u = findUstadzah(j.ustadzahId);
+          return `<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--line);">
+            <div><div style="font-weight:600;font-size:13.5px;">${j.nama}</div><div style="font-size:11.5px;color:var(--ink-faint);">Diampu ${u.nama}</div></div>
+            <span class="badge badge-green">${n} santri</span>
+          </div>`;
+        }).join('')}
+      </div>
+      <div class="panel">
+        <div class="panel-head"><h3>Pengumuman terbaru</h3></div>
+        ${DB.pengumuman.slice(0,3).map(p=>`
+          <div class="announce-item"><div class="a-title">${p.judul}</div><div class="a-date">${tglIndo(p.tanggal)}</div></div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+function findAdminName(){ return DB.admin.find(a=>a.id===session.id).nama; }
+
+/* ---- data santri ---- */
+function renderAdminSantri(){
+  const c = document.getElementById('content');
+  c.innerHTML = `
+    <div class="panel">
+      <div class="panel-head">
+        <div><h3>Data santri</h3><div class="sub">${DB.santri.length} santri terdaftar</div></div>
+        <button class="btn btn-primary btn-sm" onclick="openSantriForm()"><i class="fa-solid fa-plus"></i> Tambah santri</button>
+      </div>
+      <div class="table-scroll">
+      <table>
+        <thead><tr><th>No.</th><th>Nama santri</th><th>Jilid / kelas</th><th>Wali</th><th>No. HP wali</th><th>Aksi</th></tr></thead>
+        <tbody>
+          ${DB.santri.map((s,i)=>{
+            const jilid=findJilid(s.jilidId); const wali=findWali(s.waliId);
+            return `<tr>
+              <td>${i+1}</td>
+              <td style="font-weight:600;">${s.nama}</td>
+              <td>${jilid.nama}</td>
+              <td>${wali.nama}</td>
+              <td>${wali.hp}</td>
+              <td>
+                <button class="action-icon" title="Ubah" onclick="openSantriForm('${s.id}')"><i class="fa-solid fa-pen"></i></button>
+                <button class="action-icon brick" title="Hapus" onclick="hapusSantri('${s.id}')"><i class="fa-solid fa-trash"></i></button>
+              </td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+      </div>
+    </div>
+  `;
+}
+function openSantriForm(id){
+  const s = id ? findSantri(id) : null;
+  const wali = s ? findWali(s.waliId) : null;
+  openModal(`
+    <div class="modal-head">
+      <div><h3>${s?'Ubah data santri':'Tambah santri baru'}</h3></div>
+      <button class="modal-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row"><label>Nama santri</label><input id="f-nama" value="${s?s.nama:''}" placeholder="Nama lengkap santri"></div>
+      <div class="form-row"><label>Jilid / kelas</label>
+        <select id="f-jilid">${DB.jilid.map(j=>`<option value="${j.id}" ${s&&s.jilidId===j.id?'selected':''}>${j.nama}</option>`).join('')}</select>
+      </div>
+      <div class="form-row"><label>Nama wali</label><input id="f-wali-nama" value="${wali?wali.nama:''}" placeholder="Nama wali santri"></div>
+      <div class="form-row"><label>No. HP wali</label><input id="f-wali-hp" value="${wali?wali.hp:''}" placeholder="08xx-xxxx-xxxx"></div>
+      ${!s ? `<div class="form-row"><label>Username akun wali (untuk diunduh wali)</label><input id="f-wali-username" placeholder="wali.namapanggilan"></div>` : ''}
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeModal()">Batal</button>
+      <button class="btn btn-primary" onclick="simpanSantri('${id||''}')">Simpan</button>
+    </div>
+  `);
+}
+function simpanSantri(id){
+  const nama = document.getElementById('f-nama').value.trim();
+  const jilidId = document.getElementById('f-jilid').value;
+  const waliNama = document.getElementById('f-wali-nama').value.trim();
+  const waliHp = document.getElementById('f-wali-hp').value.trim();
+  if(!nama || !waliNama){ showToast('Nama santri dan wali wajib diisi'); return; }
+
+  if(id){
+    const s = findSantri(id); s.nama=nama; s.jilidId=jilidId;
+    const w = findWali(s.waliId); w.nama=waliNama; w.hp=waliHp;
+    showToast('Data santri diperbarui');
+  } else {
+    const newSantriId = 's'+Math.random().toString(36).slice(2,7);
+    const newWaliId = 'w'+Math.random().toString(36).slice(2,7);
+    const usernameEl = document.getElementById('f-wali-username');
+    const uname = (usernameEl && usernameEl.value.trim()) || ('wali.'+nama.split(' ')[0].toLowerCase());
+    DB.wali.push({ id:newWaliId, nama:waliNama, username:uname, hp:waliHp, santriId:newSantriId });
+    DB.santri.push({ id:newSantriId, nama, jilidId, waliId:newWaliId });
+    DB.keuangan[newSantriId]=[]; DB.riwayat[newSantriId]={bacaan:[],hafalan:[]};
+    showToast('Santri baru ditambahkan — akun wali "'+uname+'" siap diunduh');
+  }
+  closeModal(); renderAdminSantri();
+}
+function hapusSantri(id){
+  const s = findSantri(id);
+  DB.santri = DB.santri.filter(x=>x.id!==id);
+  DB.wali = DB.wali.filter(w=>w.id!==s.waliId);
+  showToast('Data santri dihapus');
+  renderAdminSantri();
+}
+
+/* ---- data guru ---- */
+function renderAdminGuru(){
+  const c = document.getElementById('content');
+  c.innerHTML = `
+    <div class="panel">
+      <div class="panel-head">
+        <div><h3>Data guru (ustadzah)</h3><div class="sub">${DB.ustadzah.length} pengajar</div></div>
+        <button class="btn btn-primary btn-sm" onclick="openGuruForm()"><i class="fa-solid fa-plus"></i> Tambah guru</button>
+      </div>
+      <div class="table-scroll">
+      <table>
+        <thead><tr><th>No.</th><th>Nama</th><th>Kelas diampu</th><th>No. HP</th><th>Username akun</th><th>Aksi</th></tr></thead>
+        <tbody>
+          ${DB.ustadzah.map((u,i)=>{
+            const j=findJilid(u.jilidId);
+            return `<tr>
+              <td>${i+1}</td>
+              <td style="font-weight:600;">${u.nama}</td>
+              <td>${j?j.nama:'—'}</td>
+              <td>${u.hp}</td>
+              <td><code>${u.username}</code></td>
+              <td>
+                <button class="action-icon" title="Ubah" onclick="openGuruForm('${u.id}')"><i class="fa-solid fa-pen"></i></button>
+                <button class="action-icon brick" title="Hapus" onclick="hapusGuru('${u.id}')"><i class="fa-solid fa-trash"></i></button>
+              </td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+      </div>
+    </div>
+  `;
+}
+function openGuruForm(id){
+  const u = id ? findUstadzah(id) : null;
+  openModal(`
+    <div class="modal-head"><div><h3>${u?'Ubah data guru':'Tambah guru baru'}</h3></div><button class="modal-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button></div>
+    <div class="modal-body">
+      <div class="form-row"><label>Nama ustadzah</label><input id="f-g-nama" value="${u?u.nama:''}" placeholder="Nama lengkap"></div>
+      <div class="form-row"><label>No. HP</label><input id="f-g-hp" value="${u?u.hp:''}" placeholder="08xx-xxxx-xxxx"></div>
+      <div class="form-row"><label>Username akun (untuk diunduh)</label><input id="f-g-username" value="${u?u.username:''}" placeholder="ustadzah.namapanggilan" ${u?'disabled':''}></div>
+    </div>
+    <div class="modal-foot"><button class="btn btn-ghost" onclick="closeModal()">Batal</button><button class="btn btn-primary" onclick="simpanGuru('${id||''}')">Simpan</button></div>
+  `);
+}
+function simpanGuru(id){
+  const nama=document.getElementById('f-g-nama').value.trim();
+  const hp=document.getElementById('f-g-hp').value.trim();
+  if(!nama){ showToast('Nama wajib diisi'); return; }
+  if(id){ const u=findUstadzah(id); u.nama=nama; u.hp=hp; showToast('Data guru diperbarui'); }
+  else {
+    const uname=document.getElementById('f-g-username').value.trim() || 'ustadzah.'+nama.split(' ')[0].toLowerCase();
+    DB.ustadzah.push({ id:'u'+Math.random().toString(36).slice(2,7), nama, username:uname, hp, jilidId:null });
+    showToast('Guru baru ditambahkan — akun "'+uname+'" siap diunduh');
+  }
+  closeModal(); renderAdminGuru();
+}
+function hapusGuru(id){ DB.ustadzah=DB.ustadzah.filter(u=>u.id!==id); showToast('Data guru dihapus'); renderAdminGuru(); }
+
+/* ---- jilid / kelas ---- */
+function renderAdminJilid(){
+  const c = document.getElementById('content');
+  c.innerHTML = `
+    <div class="panel">
+      <div class="panel-head">
+        <div><h3>Jilid / kelas</h3><div class="sub">Pengampu &amp; buku ditetapkan di sini</div></div>
+        <button class="btn btn-primary btn-sm" onclick="openJilidForm()"><i class="fa-solid fa-plus"></i> Tambah jilid</button>
+      </div>
+      <div class="table-scroll">
+      <table>
+        <thead><tr><th>Nama jilid / kelas</th><th>Ustadzah pengampu</th><th>Jumlah santri</th><th>Buku bacaan</th><th>Buku hafalan</th><th>Aksi</th></tr></thead>
+        <tbody>
+          ${DB.jilid.map(j=>{
+            const u=findUstadzah(j.ustadzahId); const n=DB.santri.filter(s=>s.jilidId===j.id).length;
+            return `<tr>
+              <td style="font-weight:600;">${j.nama}</td>
+              <td>${u?u.nama:'—'}</td>
+              <td>${n}</td>
+              <td>${j.bukuBacaan}</td>
+              <td>${j.bukuHafalan}</td>
+              <td><button class="action-icon" title="Ubah" onclick="openJilidForm('${j.id}')"><i class="fa-solid fa-pen"></i></button></td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+      </div>
+    </div>
+  `;
+}
+function openJilidForm(id){
+  const j = id ? findJilid(id) : null;
+  openModal(`
+    <div class="modal-head"><div><h3>${j?'Ubah jilid / kelas':'Tambah jilid / kelas'}</h3></div><button class="modal-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button></div>
+    <div class="modal-body">
+      <div class="form-row"><label>Nama jilid / kelas</label><input id="f-j-nama" value="${j?j.nama:''}" placeholder="Contoh: Jilid 3"></div>
+      <div class="form-row"><label>Ustadzah pengampu</label>
+        <select id="f-j-ustadzah"><option value="">— Belum ditentukan —</option>${DB.ustadzah.map(u=>`<option value="${u.id}" ${j&&j.ustadzahId===u.id?'selected':''}>${u.nama}</option>`).join('')}</select>
+      </div>
+      <div class="form-row">
+        <label>Buku dibaca (unggah PDF)</label>
+        <div class="upload-row">
+          <input type="file" class="file-input" accept="application/pdf" onchange="onPickBookFile(this,'bacaan')">
+          <div class="upload-current" id="f-j-bacaan-current"><i class="fa-solid fa-file-pdf"></i> ${j?j.bukuBacaan:'Belum ada file'}</div>
+        </div>
+      </div>
+      <div class="form-row">
+        <label>Buku dihafal (unggah PDF)</label>
+        <div class="upload-row">
+          <input type="file" class="file-input" accept="application/pdf" onchange="onPickBookFile(this,'hafalan')">
+          <div class="upload-current" id="f-j-hafalan-current"><i class="fa-solid fa-file-pdf"></i> ${j?j.bukuHafalan:'Belum ada file'}</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot"><button class="btn btn-ghost" onclick="closeModal()">Batal</button><button class="btn btn-primary" onclick="simpanJilid('${id||''}')">Simpan</button></div>
+  `);
+  ui.tempJilidFiles = { bacaan: j?j.bukuBacaan:'', hafalan: j?j.bukuHafalan:'' };
+}
+function onPickBookFile(input, jenis){
+  const f = input.files[0];
+  if(!f) return;
+  if(f.type!=='application/pdf' && !f.name.toLowerCase().endsWith('.pdf')){
+    showToast('Mohon unggah file berformat PDF'); return;
+  }
+  ui.tempJilidFiles[jenis] = f.name;
+  document.getElementById('f-j-'+jenis+'-current').innerHTML = `<i class="fa-solid fa-circle-check" style="color:var(--pine);"></i> ${f.name} (siap disimpan)`;
+}
+function simpanJilid(id){
+  const nama=document.getElementById('f-j-nama').value.trim();
+  const ustadzahId=document.getElementById('f-j-ustadzah').value || null;
+  const bacaan=(ui.tempJilidFiles && ui.tempJilidFiles.bacaan) || '';
+  const hafalan=(ui.tempJilidFiles && ui.tempJilidFiles.hafalan) || '';
+  if(!nama){ showToast('Nama jilid wajib diisi'); return; }
+  if(id){ const j=findJilid(id); j.nama=nama; j.ustadzahId=ustadzahId; j.bukuBacaan=bacaan; j.bukuHafalan=hafalan; showToast('Jilid diperbarui'); }
+  else { DB.jilid.push({ id:'j'+Math.random().toString(36).slice(2,7), nama, ustadzahId, bukuBacaan:bacaan, bukuHafalan:hafalan }); showToast('Jilid baru ditambahkan'); }
+  if(ustadzahId){ const u=findUstadzah(ustadzahId); u.jilidId = id || DB.jilid[DB.jilid.length-1].id; }
+  closeModal(); renderAdminJilid();
+}
+
+/* ---- pengaturan ---- */
+function renderAdminPengaturan(){
+  const c = document.getElementById('content');
+  c.innerHTML = `
+    <div class="panel" style="margin-bottom:16px;">
+      <div class="panel-head"><div><h3>Identitas &amp; pembayaran lembaga</h3><div class="sub">Logo tampil di halaman login &amp; header, QRIS tampil saat wali membayar</div></div></div>
+      <div class="grid grid-2">
+        <div>
+          <span class="setting-label">Logo TPQ</span>
+          <div class="upload-preview-row">
+            <div class="logo-preview" id="logo-preview">${DB.settings.logo ? `<img src="${DB.settings.logo}" alt="Pratinjau logo">` : 'TW'}</div>
+            <div>
+              <input type="file" class="file-input" accept="image/*" onchange="onPickLogo(this)">
+              <div style="font-size:11.5px;color:var(--ink-faint);margin-top:6px;">Format PNG/JPG, disarankan bentuk persegi.</div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <span class="setting-label">QRIS pembayaran lembaga</span>
+          <div class="upload-preview-row">
+            <div class="qris-preview" id="qris-preview">${DB.settings.qris ? `<img src="${DB.settings.qris}" alt="Pratinjau QRIS">` : '<i class="fa-solid fa-qrcode"></i>'}</div>
+            <div>
+              <input type="file" class="file-input" accept="image/*" onchange="onPickQris(this)">
+              <div style="font-size:11.5px;color:var(--ink-faint);margin-top:6px;">Unggah gambar QRIS statis resmi TPQ.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-2">
+      <div class="panel">
+        <div class="panel-head"><h3>Tagihan SPP</h3></div>
+        <div class="form-row"><label>Nominal SPP per bulan</label><input type="number" id="s-spp-nominal" value="${DB.settings.spp.nominal}"></div>
+        <div class="form-row"><label>Tanggal jatuh tempo (tiap bulan)</label><input type="number" id="s-spp-jatuh" value="${DB.settings.spp.jatuhTempo}" min="1" max="28"></div>
+        <button class="btn btn-primary btn-sm" onclick="simpanSpp()">Simpan pengaturan SPP</button>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><h3>Tabungan</h3></div>
+        <div class="form-row"><label>Minimal setoran per bulan</label><input type="number" id="s-tab-nominal" value="${DB.settings.tabungan.minSetor}"></div>
+        <div class="form-row"><label>Keterangan</label><textarea id="s-tab-ket">${DB.settings.tabungan.keterangan}</textarea></div>
+        <button class="btn btn-primary btn-sm" onclick="simpanTabungan()">Simpan pengaturan tabungan</button>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:16px;">
+      <div class="panel-head"><div><h3>Iuran kegiatan</h3></div><button class="btn btn-gold btn-sm" onclick="tambahIuranSetting()"><i class="fa-solid fa-plus"></i> Tambah iuran</button></div>
+      <div class="table-scroll">
+      <table>
+        <thead><tr><th>Nama iuran</th><th>Nominal</th><th>Batas waktu</th><th>Aksi</th></tr></thead>
+        <tbody>
+          ${DB.settings.iuran.map(it=>`
+            <tr><td>${it.nama}</td><td>${rupiah(it.nominal)}</td><td>${tglIndo(it.deadline)}</td>
+            <td><button class="action-icon brick" title="Hapus" onclick="hapusIuranSetting('${it.id}')"><i class="fa-solid fa-trash"></i></button></td></tr>
+          `).join('')}
+        </tbody>
+      </table>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:16px;">
+      <div class="panel-head"><div><h3>Buku PDF per jilid</h3><div class="sub">Ditampilkan otomatis di portal ustadzah &amp; wali</div></div></div>
+      <div class="table-scroll">
+      <table>
+        <thead><tr><th>Jilid / kelas</th><th>Buku bacaan</th><th>Buku hafalan</th><th>Aksi</th></tr></thead>
+        <tbody>
+          ${DB.jilid.map(j=>`<tr><td style="font-weight:600;">${j.nama}</td><td>${j.bukuBacaan}</td><td>${j.bukuHafalan}</td>
+            <td><button class="btn btn-ghost btn-sm" onclick="openJilidForm('${j.id}')"><i class="fa-solid fa-file-pdf"></i> Atur buku</button></td></tr>`).join('')}
+        </tbody>
+      </table>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:16px;">
+      <div class="panel-head"><div><h3>Info pengumuman</h3></div><button class="btn btn-gold btn-sm" onclick="openPengumumanForm()"><i class="fa-solid fa-plus"></i> Buat pengumuman</button></div>
+      ${DB.pengumuman.map(p=>`
+        <div class="announce-item" style="display:flex;justify-content:space-between;gap:10px;">
+          <div>
+            <div class="a-title">${p.judul}</div>
+            <div class="a-date">${tglIndo(p.tanggal)}</div>
+            <div class="a-body">${p.isi}</div>
+          </div>
+          <button class="action-icon brick" title="Hapus" onclick="hapusPengumuman('${p.id}')" style="flex-shrink:0;height:32px;"><i class="fa-solid fa-trash"></i></button>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+function onPickLogo(input){
+  const f = input.files[0];
+  if(!f) return;
+  const reader = new FileReader();
+  reader.onload = function(e){
+    DB.settings.logo = e.target.result;
+    document.getElementById('logo-preview').innerHTML = `<img src="${DB.settings.logo}" alt="Pratinjau logo">`;
+    applyBranding();
+    showToast('Logo lembaga diperbarui');
+  };
+  reader.readAsDataURL(f);
+}
+function onPickQris(input){
+  const f = input.files[0];
+  if(!f) return;
+  const reader = new FileReader();
+  reader.onload = function(e){
+    DB.settings.qris = e.target.result;
+    document.getElementById('qris-preview').innerHTML = `<img src="${DB.settings.qris}" alt="Pratinjau QRIS">`;
+    showToast('QRIS lembaga diperbarui');
+  };
+  reader.readAsDataURL(f);
+}
+function simpanSpp(){
+  DB.settings.spp.nominal = parseInt(document.getElementById('s-spp-nominal').value)||0;
+  DB.settings.spp.jatuhTempo = parseInt(document.getElementById('s-spp-jatuh').value)||10;
+  showToast('Pengaturan SPP disimpan');
+}
+function simpanTabungan(){
+  DB.settings.tabungan.minSetor = parseInt(document.getElementById('s-tab-nominal').value)||0;
+  DB.settings.tabungan.keterangan = document.getElementById('s-tab-ket').value;
+  showToast('Pengaturan tabungan disimpan');
+}
+function tambahIuranSetting(){
+  openModal(`
+    <div class="modal-head"><div><h3>Tambah iuran kegiatan</h3></div><button class="modal-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button></div>
+    <div class="modal-body">
+      <div class="form-row"><label>Nama kegiatan</label><input id="f-iuran-nama" placeholder="Contoh: Iuran Pondok Ramadhan"></div>
+      <div class="form-row"><label>Nominal</label><input type="number" id="f-iuran-nominal" placeholder="0"></div>
+      <div class="form-row"><label>Batas waktu</label><input type="date" id="f-iuran-deadline"></div>
+    </div>
+    <div class="modal-foot"><button class="btn btn-ghost" onclick="closeModal()">Batal</button><button class="btn btn-primary" onclick="simpanIuranSetting()">Simpan</button></div>
+  `);
+}
+function simpanIuranSetting(){
+  const nama=document.getElementById('f-iuran-nama').value.trim();
+  const nominal=parseInt(document.getElementById('f-iuran-nominal').value)||0;
+  const deadline=document.getElementById('f-iuran-deadline').value || new Date().toISOString().slice(0,10);
+  if(!nama){ showToast('Nama iuran wajib diisi'); return; }
+  DB.settings.iuran.push({ id:'ik'+Math.random().toString(36).slice(2,7), nama, nominal, deadline });
+  // otomatis tambahkan tagihan ke semua santri
+  DB.santri.forEach(s=>{
+    if(!DB.keuangan[s.id]) DB.keuangan[s.id]=[];
+    DB.keuangan[s.id].push({ id:'k'+Math.random().toString(36).slice(2,7), jenis:'Iuran', label:nama, nominal, status:'belum', metode:'-', tanggal:'-' });
+  });
+  showToast('Iuran baru dibuat dan tagihan dikirim ke seluruh santri');
+  closeModal(); renderAdminPengaturan();
+}
+function hapusIuranSetting(id){ DB.settings.iuran = DB.settings.iuran.filter(i=>i.id!==id); showToast('Iuran dihapus dari pengaturan'); renderAdminPengaturan(); }
+
+function openPengumumanForm(){
+  openModal(`
+    <div class="modal-head"><div><h3>Buat pengumuman</h3></div><button class="modal-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button></div>
+    <div class="modal-body">
+      <div class="form-row"><label>Judul</label><input id="f-p-judul" placeholder="Judul pengumuman"></div>
+      <div class="form-row"><label>Isi pengumuman</label><textarea id="f-p-isi" placeholder="Tuliskan isi pengumuman untuk wali santri..."></textarea></div>
+    </div>
+    <div class="modal-foot"><button class="btn btn-ghost" onclick="closeModal()">Batal</button><button class="btn btn-primary" onclick="simpanPengumuman()">Terbitkan</button></div>
+  `);
+}
+function simpanPengumuman(){
+  const judul=document.getElementById('f-p-judul').value.trim();
+  const isi=document.getElementById('f-p-isi').value.trim();
+  if(!judul || !isi){ showToast('Judul dan isi wajib diisi'); return; }
+  DB.pengumuman.unshift({ id:'p'+Math.random().toString(36).slice(2,7), judul, isi, tanggal:new Date().toISOString().slice(0,10) });
+  showToast('Pengumuman diterbitkan ke seluruh wali santri');
+  closeModal(); renderAdminPengaturan();
+}
+function hapusPengumuman(id){ DB.pengumuman = DB.pengumuman.filter(p=>p.id!==id); showToast('Pengumuman dihapus'); renderAdminPengaturan(); }
+
+applyBranding();
+</script>
+
+<script>
+const FIREBASE_CONFIG={
+  apiKey:"AIzaSyBUM53K-Av3DkwkW6NNQg0wKQ-ehtVZ428",
+  authDomain:"tpqwardah.firebaseapp.com",
+  projectId:"tpqwardah",
+  storageBucket:"tpqwardah.firebasestorage.app",
+  messagingSenderId:"308318249706",
+  appId:"1:308318249706:web:ad1f631acee81a2fe6ad93",
+  measurementId:"G-ZVC3M0L8XJ"
+};
+
+const $=id=>document.getElementById(id);
+function clearLoginError(){const e=$("login-error");if(e)e.style.display="none";}
+function showLoginError(msg){const e=$("login-error");if(e){e.textContent=msg;e.style.display="block";}}
+
+let fbApp=null,fbAuth=null,fbDb=null,fbStorage=null;
+let fbUnsubs=[];
+let fbReady=false;
+
+function firebaseConfigured(){
+  return Object.values(FIREBASE_CONFIG).every(v=>v&&String(v).indexOf("ISI_")!==0);
+}
+
+function fbDate(){
+  return new Date().toISOString().slice(0,10);
+}
+
+function fbUsernameEmail(username){
+  return String(username||"").trim().toLowerCase()+"@tpq.local";
+}
+
+function fbId(){
+  return "id_"+crypto.randomUUID();
+}
+
+function fbObject(docSnap){
+  return {id:docSnap.id,...docSnap.data()};
+}
+
+function fbClearListeners(){
+  fbUnsubs.forEach(u=>{try{u()}catch(e){}});
+  fbUnsubs=[];
+}
+
+function fbRefresh(){
+  if(!session)return;
+  try{
+    renderSidebar();
+    if(session.role==="wali")renderWaliDashboard();
+    if(session.role==="ustadzah")renderUstadzahDashboard();
+    if(session.role==="admin")renderAdmin();
+  }catch(e){console.error(e)}
+}
+
+function fbListen(name,target){
+  const u=fbDb.collection(name).onSnapshot(snap=>{
+    DB[target]=snap.docs.map(fbObject);
+    fbRefresh();
+  },e=>console.error("Firestore listener:",name,e));
+  fbUnsubs.push(u);
+}
+
+function fbListenNested(name,target){
+  const u=fbDb.collection(name).onSnapshot(snap=>{
+    DB[target]={};
+    snap.docs.forEach(d=>DB[target][d.id]=d.data());
+    fbRefresh();
+  },e=>console.error("Firestore listener:",name,e));
+  fbUnsubs.push(u);
+}
+
+function fbListenFinance(){
+  const u=fbDb.collection("keuangan").onSnapshot(snap=>{
+    DB.keuangan={};
+    snap.docs.forEach(d=>DB.keuangan[d.id]=d.data().items||[]);
+    fbRefresh();
+  },e=>console.error("Firestore listener: keuangan",e));
+  fbUnsubs.push(u);
+}
+
+function fbListenSettings(){
+  const u=fbDb.collection("settings").doc("main").onSnapshot(snap=>{
+    if(snap.exists)DB.settings={...DB.settings,...snap.data()};
+    applyBranding();
+    fbRefresh();
+  },e=>console.error("Firestore listener: settings",e));
+  fbUnsubs.push(u);
+}
+
+function fbStartRealtime(){
+  fbClearListeners();
+  fbListen("jilid","jilid");
+  fbListen("ustadzah","ustadzah");
+  fbListen("santri","santri");
+  fbListen("wali","wali");
+  fbListen("admin","admin");
+  fbListen("pengumuman","pengumuman");
+  fbListenNested("riwayat","riwayat");
+  fbListenFinance();
+  fbListenSettings();
+}
+
+function fbProfile(uid){
+  return fbDb.collection("users").doc(uid).get().then(snap=>{
+    if(!snap.exists)throw new Error("Profil pengguna belum dibuat di Firestore.");
+    return {id:uid,...snap.data()};
+  });
+}
+
+function fbShowLogin(){
+  $("login-screen").style.display="flex";
+  $("app-shell").style.display="none";
+  const username=localStorage.getItem("tpq_device_username")||"";
+  const account=$("account-display");
+  const usernameInput=$("device-username");
+  if(username){
+    if(account)account.textContent=username;
+    if(usernameInput)usernameInput.style.display="none";
+    $("login-password").focus();
+  }else{
+    if(account)account.textContent="Belum ada akun perangkat";
+    if(usernameInput){usernameInput.style.display="block";usernameInput.value="";}
+  }
+  const note=$("login-note");
+  if(note)note.textContent=username?"Masukkan kata sandi akun "+username+".":"Masukkan username akun yang diberikan admin, lalu kata sandi.";
+}
+
+function fbSetSession(profile){
+  session={role:profile.role,id:profile.id,nama:profile.nama,username:profile.username};
+  localStorage.setItem("tpq_device_username",profile.username||"");
+  localStorage.setItem("tpq_session_uid",profile.id);
+  $("login-screen").style.display="none";
+  $("app-shell").style.display="block";
+  $("topbar-role-label").textContent=profile.role==="wali"?"Portal Wali":profile.role==="ustadzah"?"Portal Ustadzah":"Portal Admin";
+  $("topbar-username").textContent=profile.nama||profile.username||"-";
+  $("topbar-usersub").textContent="@"+(profile.username||"-");
+  renderSidebar();
+}
+
+async function doLogin(){
+  clearLoginError();
+  if(!fbReady){
+    showLoginError("Firebase belum siap. Periksa koneksi internet dan konfigurasi Firebase.");
+    return;
+  }
+  let username=localStorage.getItem("tpq_device_username")||"";
+  if(!username){
+    username=$("device-username")?.value.trim().toLowerCase()||"";
+    if(!username){
+      showLoginError("Username wajib diisi pada perangkat ini.");
+      return;
+    }
+    if(!/^[a-z0-9._-]{3,50}$/.test(username)){
+      showLoginError("Format username tidak valid.");
+      return;
+    }
+    localStorage.setItem("tpq_device_username",username);
+  }
+  const pass=$("login-password").value;
+  if(!pass){
+    showLoginError("Kata sandi wajib diisi.");
+    return;
+  }
+  if(!pass){
+    showLoginError("Kata sandi wajib diisi.");
+    return;
+  }
+  try{
+    const cred=await fbAuth.signInWithEmailAndPassword(fbUsernameEmail(username),pass);
+    const profile=await fbProfile(cred.user.uid);
+    if(!profile.role)throw new Error("Role pengguna belum diatur.");
+    if(String(profile.username||"").toLowerCase()!==username.toLowerCase())throw new Error("Username akun tidak sesuai.");
+    fbSetSession(profile);
+    fbStartRealtime();
+    fbRefresh();
+  }catch(e){
+    console.error(e);
+    showLoginError(e.code==="auth/invalid-credential"||e.code==="auth/wrong-password"||e.code==="auth/user-not-found"?"Kata sandi atau akun tidak valid.":e.message||"Login gagal.");
+  }
+}
+
+async function doLogout(){
+  fbClearListeners();
+  session=null;
+  localStorage.removeItem("tpq_session_uid");
+  if(fbAuth)await fbAuth.signOut();
+  $("app-shell").style.display="none";
+  $("login-screen").style.display="flex";
+  $("login-password").value="";
+  fbShowLogin();
+}
+
+function onPickAccount(){
+  const el=$("device-username");
+  if(el&&el.value.trim()){
+    localStorage.setItem("tpq_device_username",el.value.trim().toLowerCase());
+    fbShowLogin();
+  }
+}
+
+function findWali(id){
+  return DB.wali.find(w=>w.id===id)||DB.wali.find(w=>w.uid===id)||DB.wali.find(w=>w.username===session?.username);
+}
+
+function findUstadzah(id){
+  return DB.ustadzah.find(u=>u.id===id)||DB.ustadzah.find(u=>u.uid===id)||DB.ustadzah.find(u=>u.username===session?.username);
+}
+
+function findAdminName(){
+  return DB.admin.find(a=>a.id===session?.id)?.nama||DB.admin.find(a=>a.uid===session?.id)?.nama||session?.nama||"Admin TPQ";
+}
+
+async function fbWrite(collectionName,id,data){
+  const payload={...data,updatedAt:firebase.firestore.FieldValue.serverTimestamp()};
+  await fbDb.collection(collectionName).doc(id).set(payload,{merge:true});
+}
+
+async function fbDelete(collectionName,id){
+  await fbDb.collection(collectionName).doc(id).delete();
+}
+
+async function saveRiwayat(sid,data){
+  const current=DB.riwayat[sid]||{bacaan:[],hafalan:[]};
+  current[data.jenis]=data.list;
+  await fbWrite("riwayat",sid,current);
+}
+
+async function markHalaman(sid,jenis){
+  const val=parseInt($("halaman-input").value)||1;
+  const current=DB.riwayat[sid]||{bacaan:[],hafalan:[]};
+  const list=[...(current[jenis]||[])];
+  list.unshift({halaman:val,status:"naik",pesan:"Halaman ditandai oleh ustadzah.",pesanTipe:"teks",tanggal:fbDate()});
+  await saveRiwayat(sid,{jenis,list});
+  showToast("Halaman terakhir tersimpan");
+}
+
+async function addRiwayat(sid,jenis,status){
+  const current=DB.riwayat[sid]||{bacaan:[],hafalan:[]};
+  const list=[...(current[jenis]||[])];
+  const last=list[0]||{halaman:1};
+  list.unshift({halaman:last.halaman,status,pesan:status==="naik"?"Alhamdulillah, bacaan sudah baik.":"Perlu diulang, latihan sedikit lagi ya.",pesanTipe:"teks",tanggal:fbDate()});
+  await saveRiwayat(sid,{jenis,list});
+  showToast(status==="naik"?"Ditandai naik":"Ditandai mengulang");
+}
+
+async function sendPesan(sid,jenis){
+  const teks=$("pesan-teks")?.value.trim();
+  const current=DB.riwayat[sid]||{bacaan:[],hafalan:[]};
+  const list=[...(current[jenis]||[])];
+  const last=list[0]||{halaman:1,status:"naik"};
+  if(ui.recordSeconds>0){
+    list.unshift({halaman:last.halaman,status:last.status||"naik",pesan:`Pesan suara (${fmtTime(ui.recordSeconds)})`,pesanTipe:"suara",tanggal:fbDate()});
+  }else if(teks){
+    list.unshift({halaman:last.halaman,status:last.status||"naik",pesan:teks,pesanTipe:"teks",tanggal:fbDate()});
+  }else{
+    showToast("Tulis pesan atau rekam pesan suara terlebih dahulu");
+    return;
+  }
+  await saveRiwayat(sid,{jenis,list});
+  ui.recording=false;
+  ui.recordSeconds=0;
+  clearInterval(ui.recordTimer);
+  ui.recordTimer=null;
+  showToast("Pesan tersimpan realtime");
+}
+
+async function markLunas(sid,kid){
+  const list=[...(DB.keuangan[sid]||[])];
+  const item=list.find(k=>k.id===kid);
+  if(!item)return;
+  item.status="lunas";
+  item.metode="Tunai";
+  item.tanggal=fbDate();
+  await fbWrite("keuangan",sid,{items:list});
+  showToast("Ditandai lunas");
+}
+
+async function tambahSetoran(sid){
+  const d=new Date();
+  const bulan=["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+  const list=[...(DB.keuangan[sid]||[])];
+  list.push({id:fbId(),jenis:"Tabungan",label:`Tabungan ${bulan[d.getMonth()]} ${d.getFullYear()}`,nominal:Number(DB.settings.tabungan.minSetor||0),status:"belum",metode:"-",tanggal:"-"});
+  await fbWrite("keuangan",sid,{items:list});
+  showToast("Catatan tabungan ditambahkan");
+}
+
+async function simpanSantri(id){
+  const nama=$("f-nama").value.trim();
+  const jilidId=$("f-jilid").value;
+  const waliNama=$("f-wali-nama").value.trim();
+  const waliHp=$("f-wali-hp").value.trim();
+  if(!nama||!waliNama){showToast("Nama santri dan wali wajib diisi");return}
+  if(id){
+    const s=findSantri(id);
+    const w=findWali(s?.waliId);
+    await fbWrite("santri",id,{nama,jilidId});
+    if(w)await fbWrite("wali",w.id,{nama:waliNama,hp:waliHp});
+    showToast("Data santri diperbarui");
+  }else{
+    const sid=fbId();
+    const wid=fbId();
+    const uname=($("f-wali-username")?.value.trim()||"wali."+nama.split(" ")[0].toLowerCase());
+    await fbWrite("wali",wid,{nama:waliNama,username:uname,hp:waliHp,santriId:sid,role:"wali"});
+    await fbWrite("santri",sid,{nama,jilidId,waliId:wid});
+    await fbWrite("keuangan",sid,{items:[]});
+    await fbWrite("riwayat",sid,{bacaan:[],hafalan:[]});
+    showToast("Data santri ditambahkan");
+  }
+  closeModal();
+}
+
+async function hapusSantri(id){
+  const s=findSantri(id);
+  if(!s||!confirm("Hapus data santri ini?"))return;
+  await fbDelete("santri",id);
+  if(s.waliId)await fbDelete("wali",s.waliId);
+  await fbDelete("keuangan",id);
+  await fbDelete("riwayat",id);
+  showToast("Data santri dihapus");
+}
+
+async function simpanGuru(id){
+  const nama=$("f-g-nama").value.trim();
+  const hp=$("f-g-hp").value.trim();
+  if(!nama){showToast("Nama wajib diisi");return}
+  if(id){
+    await fbWrite("ustadzah",id,{nama,hp});
+    showToast("Data guru diperbarui");
+  }else{
+    const uname=$("f-g-username").value.trim()||"ustadzah."+nama.split(" ")[0].toLowerCase();
+    await fbWrite("ustadzah",fbId(),{nama,username:uname,hp,jilidId:null,role:"ustadzah"});
+    showToast("Profil guru ditambahkan");
+  }
+  closeModal();
+}
+
+async function hapusGuru(id){
+  if(!confirm("Hapus data guru ini?"))return;
+  await fbDelete("ustadzah",id);
+  showToast("Data guru dihapus");
+}
+
+async function simpanJilid(id){
+  const nama=$("f-j-nama").value.trim();
+  const ustadzahId=$("f-j-ustadzah").value||null;
+  if(!nama){showToast("Nama jilid wajib diisi");return}
+  let bacaan=ui.tempJilidFiles?.bacaan||"";
+  let hafalan=ui.tempJilidFiles?.hafalan||"";
+  if(bacaan instanceof File)bacaan=await fbUpload(bacaan,"buku");
+  if(hafalan instanceof File)hafalan=await fbUpload(hafalan,"buku");
+  const jid=id||fbId();
+  await fbWrite("jilid",jid,{nama,ustadzahId,bukuBacaan:bacaan,bukuHafalan:hafalan});
+  if(ustadzahId)await fbWrite("ustadzah",ustadzahId,{jilidId:jid});
+  closeModal();
+  showToast("Jilid disimpan");
+}
+
+async function fbUpload(file,folder){
+  const path=`${folder}/${Date.now()}_${fbId()}_${file.name}`;
+  const snapshot=await fbStorage.ref(path).put(file);
+  return await snapshot.ref.getDownloadURL();
+}
+
+async function onPickLogo(input){
+  const f=input.files[0];
+  if(!f)return;
+  const url=await fbUpload(f,"branding");
+  await fbWrite("settings","main",{logo:url});
+  showToast("Logo lembaga diperbarui");
+}
+
+async function onPickQris(input){
+  const f=input.files[0];
+  if(!f)return;
+  const url=await fbUpload(f,"branding");
+  await fbWrite("settings","main",{qris:url});
+  showToast("QRIS lembaga diperbarui");
+}
+
+async function simpanSpp(){
+  const nominal=parseInt($("s-spp-nominal").value)||0;
+  const jatuhTempo=parseInt($("s-spp-jatuh").value)||10;
+  await fbWrite("settings","main",{spp:{nominal,jatuhTempo}});
+  showToast("Pengaturan SPP disimpan");
+}
+
+async function simpanTabungan(){
+  const minSetor=parseInt($("s-tab-nominal").value)||0;
+  const keterangan=$("s-tab-ket").value;
+  await fbWrite("settings","main",{tabungan:{minSetor,keterangan}});
+  showToast("Pengaturan tabungan disimpan");
+}
+
+async function simpanPengumuman(){
+  const judul=$("f-p-judul").value.trim();
+  const isi=$("f-p-isi").value.trim();
+  if(!judul||!isi){showToast("Judul dan isi wajib diisi");return}
+  await fbWrite("pengumuman",fbId(),{judul,isi,tanggal:fbDate(),createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+  closeModal();
+  showToast("Pengumuman diterbitkan");
+}
+
+async function hapusPengumuman(id){
+  if(!confirm("Hapus pengumuman ini?"))return;
+  await fbDelete("pengumuman",id);
+  showToast("Pengumuman dihapus");
+}
+
+async function tambahIuranSetting(){
+  openModal(`<div class="modal-head"><div><h3>Tambah iuran kegiatan</h3></div><button class="modal-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button></div><div class="modal-body"><div class="form-row"><label>Nama kegiatan</label><input id="f-iuran-nama"></div><div class="form-row"><label>Nominal</label><input type="number" id="f-iuran-nominal"></div><div class="form-row"><label>Batas waktu</label><input type="date" id="f-iuran-deadline"></div></div><div class="modal-foot"><button class="btn btn-ghost" onclick="closeModal()">Batal</button><button class="btn btn-primary" onclick="simpanIuranSetting()">Simpan</button></div>`);
+}
+
+async function simpanIuranSetting(){
+  const nama=$("f-iuran-nama").value.trim();
+  const nominal=parseInt($("f-iuran-nominal").value)||0;
+  const deadline=$("f-iuran-deadline").value||fbDate();
+  if(!nama){showToast("Nama iuran wajib diisi");return}
+  const settings={...DB.settings,iuran:[...(DB.settings.iuran||[]),{id:fbId(),nama,nominal,deadline}]};
+  await fbWrite("settings","main",{iuran:settings.iuran});
+  const batch=fbDb.batch();
+  DB.santri.forEach(s=>{
+    const list=[...(DB.keuangan[s.id]||[])];
+    list.push({id:fbId(),jenis:"Iuran",label:nama,nominal,status:"belum",metode:"-",tanggal:"-"});
+    batch.set(fbDb.collection("keuangan").doc(s.id),{items:list,updatedAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});
+  });
+  await batch.commit();
+  closeModal();
+  showToast("Iuran dibuat dan ditambahkan ke santri");
+}
+
+async function hapusIuranSetting(id){
+  const list=(DB.settings.iuran||[]).filter(x=>x.id!==id);
+  await fbWrite("settings","main",{iuran:list});
+  showToast("Iuran dihapus dari pengaturan");
+}
+
+async function bootstrapFirebase(){
+  if(!firebaseConfigured()){
+    fbShowLogin();
+    return;
+  }
+  try{
+    fbApp=firebase.initializeApp(FIREBASE_CONFIG);
+    fbAuth=firebase.auth();
+    fbDb=firebase.firestore();
+    fbStorage=firebase.storage();
+    fbReady=true;
+    fbAuth.onAuthStateChanged(async user=>{
+      if(user){
+        try{
+          const profile=await fbProfile(user.uid);
+          fbSetSession(profile);
+          fbStartRealtime();
+          fbRefresh();
+        }catch(e){
+          console.error(e);
+          await fbAuth.signOut();
+          fbShowLogin();
+        }
+      }else{
+        fbShowLogin();
+      }
+      fbShowLogin();
+    });
+  }catch(e){
+    console.error(e);
+    fbShowLogin();
+    showLoginError("Firebase gagal diinisialisasi: "+e.message);
+  }
+}
+
+window.doLogin=doLogin;
+window.doLogout=doLogout;
+window.onPickAccount=onPickAccount;
+window.markHalaman=markHalaman;
+window.addRiwayat=addRiwayat;
+window.sendPesan=sendPesan;
+window.markLunas=markLunas;
+window.tambahSetoran=tambahSetoran;
+window.simpanSantri=simpanSantri;
+window.hapusSantri=hapusSantri;
+window.simpanGuru=simpanGuru;
+window.hapusGuru=hapusGuru;
+window.simpanJilid=simpanJilid;
+window.onPickLogo=onPickLogo;
+window.onPickQris=onPickQris;
+window.simpanSpp=simpanSpp;
+window.simpanTabungan=simpanTabungan;
+window.simpanPengumuman=simpanPengumuman;
+window.hapusPengumuman=hapusPengumuman;
+window.tambahIuranSetting=tambahIuranSetting;
+window.simpanIuranSetting=simpanIuranSetting;
+window.hapusIuranSetting=hapusIuranSetting;
+window.openSantriForm=openSantriForm;
+window.openGuruForm=openGuruForm;
+window.openJilidForm=openJilidForm;
+window.openPengumumanForm=openPengumumanForm;
+window.openFinanceModal=openFinanceModal;
+window.openBookModal=openBookModal;
+window.openQrisModal=openQrisModal;
+window.viewPage=viewPage;
+window.toggleRecording=toggleRecording;
+window.closeModal=closeModal;
+window.showToast=showToast;
+window.setAdminTab=setAdminTab;
+window.setFinanceTab=setFinanceTab;
+window.onPickBookFile=onPickBookFile;
+
+bootstrapFirebase();
+</script>
+</body>
+</html>
